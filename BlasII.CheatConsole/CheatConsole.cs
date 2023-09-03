@@ -1,13 +1,22 @@
-﻿using BlasII.ModdingAPI;
+﻿using BlasII.CheatConsole.Commands;
+using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.UI;
 using Il2CppTGK.Game;
 using Il2CppTMPro;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BlasII.CheatConsole
 {
     public class CheatConsole : BlasIIMod
     {
+        private readonly Dictionary<string, BaseCommand> _commands = new();
+
+        private RectTransform consoleObject;
+        private TextMeshProUGUI consoleText;
+
+        private bool _enabled = false;
+
         public CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
         protected override void OnInitialize()
@@ -20,10 +29,6 @@ namespace BlasII.CheatConsole
             if (consoleObject == null && sceneName == "MainMenu")
                 CreateConsoleUI();
         }
-
-        RectTransform consoleObject;
-        TextMeshProUGUI consoleText;
-        private bool _enabled = false;
 
         private void CreateConsoleUI()
         {

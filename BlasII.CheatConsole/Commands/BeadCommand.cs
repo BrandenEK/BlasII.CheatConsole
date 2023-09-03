@@ -23,7 +23,7 @@ namespace BlasII.CheatConsole.Commands
             Main.CheatConsole.LogWarning("Removing bead: " + parameters[0]);
         }
 
-        protected override Dictionary<string, Action<string[]>> RegisterCommands()
+        protected override Dictionary<string, Action<string[]>> RegisterSubcommands()
         {
             return new Dictionary<string, Action<string[]>>()
             {

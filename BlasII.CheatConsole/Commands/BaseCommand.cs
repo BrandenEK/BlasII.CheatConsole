@@ -14,7 +14,7 @@ namespace BlasII.CheatConsole.Commands
 
         internal void Execute(string subcommand, string[] parameters)
         {
-            _commands ??= RegisterCommands();
+            _commands ??= RegisterSubcommands();
 
             if (_commands.ContainsKey(subcommand))
             {
@@ -31,7 +31,7 @@ namespace BlasII.CheatConsole.Commands
             bool isValid = paramaters.Length == num;
 
             if (!isValid)
-                Main.CheatConsole.LogError($"Command '{_name} {subcommand}' requires {num} parameters!");
+                Main.CheatConsole.LogError($"Subcommand '{subcommand}' requires {num} parameters!");
 
             return isValid;
         }
@@ -46,6 +46,6 @@ namespace BlasII.CheatConsole.Commands
             return isValid;
         }
 
-        protected abstract Dictionary<string, Action<string[]>> RegisterCommands();
+        protected abstract Dictionary<string, Action<string[]>> RegisterSubcommands();
     }
 }

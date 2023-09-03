@@ -16,41 +16,22 @@ namespace BlasII.CheatConsole
         private TextMeshProUGUI consoleText;
 
         private bool _enabled = false;
+        private string _currentText = string.Empty;
 
         public CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
+        public void RegisterCommand(BaseCommand command)
+        {
+            if (command.Name.Length > 0 && !_commands.ContainsKey(command.Name))
+            {
+                _commands.Add(command.Name, command);
+                Log("Registering new command: " + command.Name);
+            }
+        }
+
         protected override void OnInitialize()
         {
-            LogError($"{ModInfo.MOD_NAME} is initialized");
-        }
-
-        protected override void OnSceneLoaded(string sceneName)
-        {
-            if (consoleObject == null && sceneName == "MainMenu")
-                CreateConsoleUI();
-        }
-
-        private void CreateConsoleUI()
-        {
-            consoleObject = UIModder.CreateRect("CheatConsole")
-                .SetXRange(Vector2.zero).SetYRange(Vector2.zero)
-                .SetSize(800, 50)
-                .SetPivot(Vector2.zero)
-                .AddImage()
-                .SetColor(new Color(0.15f, 0.15f, 0.15f, 0.9f))
-                .rectTransform;
-
-            TMP_FontAsset font = TMP_FontAsset.CreateFontAsset(Resources.GetBuiltinResource<Font>("Arial.ttf"));
-
-            consoleText = UIModder.CreateRect("Text", consoleObject)
-                .SetPosition(10, 0)
-                .SetSize(790, 50)
-                .AddText()
-                .SetFontSize(28)
-                .SetAlignment(TextAlignmentOptions.Left)
-                .SetFont(font);
-
-            consoleObject.gameObject.SetActive(false);
+            RegisterCommand(new BeadCommand());
         }
 
         protected override void OnUpdate()
@@ -63,7 +44,7 @@ namespace BlasII.CheatConsole
             if (Input.GetKeyDown(KeyCode.Backslash) && (!CoreCache.Input.InputBlocked && CoreCache.Room.CurrentRoom != null || _enabled))
             {
                 _enabled = !_enabled;
-                consoleObject.gameObject.SetActive(_enabled);
+                GetConsoleObject().gameObject.SetActive(_enabled);
 
                 if (_enabled)
                     OnEnable();
@@ -74,14 +55,12 @@ namespace BlasII.CheatConsole
 
         private void OnEnable()
         {
-            LogWarning("Enabling console");
             CoreCache.Input.SetInputBlock(true, false);
             ResetConsole();
         }
 
         private void OnDisable()
         {
-            LogWarning("Disabling console");
             CoreCache.Input.ClearAllInputBlocks();
         }
 
@@ -98,13 +77,17 @@ namespace BlasII.CheatConsole
                 // Confirm
                 else if (c == '\n' || c == '\r')
                 {
-                    ProcessCommand(_currentText);
-                    ResetConsole();
+                    if (_currentText.Length > 0)
+                    {
+                        ProcessCommand(_currentText);
+                        ResetConsole();
+                    }
                 }
                 // Regular character
                 else
                 {
-                    _currentText += c;
+                    if (c != ' ' || _currentText.Length > 0)
+                        _currentText += c;
                 }
             }
 
@@ -122,9 +105,51 @@ namespace BlasII.CheatConsole
 
         private void ProcessCommand(string command)
         {
-            Log("Processing command: " + command);
+            Log("[CONSOLE] " + command);
+            string[] parts = command.Trim().ToLower().Split(' ');
+
+            if (parts.Length < 1)
+                parts = new string[] { string.Empty };
+            else if (parts.Length < 2)
+                parts = new string[] { parts[0], string.Empty };
+
+            if (!_commands.ContainsKey(parts[0]))
+            {
+                LogError($"Command '{parts[0]}' is not a valid command!");
+                return;
+            }
+
+            _commands[parts[0]].Execute(parts[1], parts[2..]);
         }
 
-        private string _currentText = string.Empty;
+        private GameObject GetConsoleObject()
+        {
+            // If console object already exists, return it
+            if (consoleObject != null)
+                return consoleObject.gameObject;
+
+            // Create console background
+            consoleObject = UIModder.CreateRect("CheatConsole")
+                .SetXRange(Vector2.zero).SetYRange(Vector2.zero)
+                .SetSize(800, 50)
+                .SetPivot(Vector2.zero)
+                .AddImage()
+                .SetColor(new Color(0.15f, 0.15f, 0.15f, 0.9f))
+                .rectTransform;
+
+            TMP_FontAsset font = TMP_FontAsset.CreateFontAsset(Resources.GetBuiltinResource<Font>("Arial.ttf"));
+
+            // Create console text
+            consoleText = UIModder.CreateRect("Text", consoleObject)
+                .SetPosition(10, 0)
+                .SetSize(790, 50)
+                .AddText()
+                .SetFontSize(28)
+                .SetAlignment(TextAlignmentOptions.Left)
+                .SetFont(font);
+
+            consoleObject.gameObject.SetActive(false);
+            return consoleObject.gameObject;
+        }
     }
 }

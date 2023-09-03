@@ -1,11 +1,8 @@
 ﻿using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.UI;
+using Il2CppTGK.Game;
 using Il2CppTMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using HarmonyLib;
-using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole
 {
@@ -20,18 +17,17 @@ namespace BlasII.CheatConsole
 
         protected override void OnSceneLoaded(string sceneName)
         {
-            if (sceneName == "MainMenu")
+            if (consoleObject == null && sceneName == "MainMenu")
                 CreateConsoleUI();
         }
 
-        public bool Enabled => _enabled;
-
-        RectTransform console;
+        RectTransform consoleObject;
+        TextMeshProUGUI consoleText;
         private bool _enabled = false;
 
         private void CreateConsoleUI()
         {
-            console = UIModder.CreateRect("CheatConsole")
+            consoleObject = UIModder.CreateRect("CheatConsole")
                 .SetXRange(Vector2.zero).SetYRange(Vector2.zero)
                 .SetSize(800, 50)
                 .SetPivot(Vector2.zero)
@@ -39,136 +35,91 @@ namespace BlasII.CheatConsole
                 .SetColor(new Color(0.15f, 0.15f, 0.15f, 0.9f))
                 .rectTransform;
 
-            //var child = UIModder.CreateRect("Input", console)
-            //    .SetXRange(0.5f, 0.5f).SetYRange(0, 0)
-            //    .SetPivot(0.5f, 0)
-            //    .SetSize(400, 30);
-            //.SetPosition(5, -5)
-            //.AddImage()
-            //.SetColor(Color.blue);
-
             TMP_FontAsset font = TMP_FontAsset.CreateFontAsset(Resources.GetBuiltinResource<Font>("Arial.ttf"));
 
-            var text = UIModder.CreateRect("Text", console)
-                //.SetXRange(0, 1).SetYRange(0, 1)
-                //.SetPivot(0, 0)
+            consoleText = UIModder.CreateRect("Text", consoleObject)
                 .SetPosition(10, 0)
                 .SetSize(790, 50)
-            //.AddImage()
-            //.SetColor(new Color(1, 0, 0, 0.5f))
-            //.rectTransform;
-            .AddText()
-            .SetFontSize(28)
-            .SetAlignment(TextAlignmentOptions.Left)
-            .SetContents("Test")
-            .SetFont(font);
+                .AddText()
+                .SetFontSize(28)
+                .SetAlignment(TextAlignmentOptions.Left)
+                .SetFont(font);
 
-            console.gameObject.SetActive(false);
-            //(Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font);
-
-            //input = child.gameObject.AddComponent<TMP_InputField>();
-            //input.transition = Selectable.Transition.None;
-            //input.textViewport = text.rectTransform;
-            //input.textComponent = text;
-
-            //input.text = "Test";
+            consoleObject.gameObject.SetActive(false);
         }
 
         protected override void OnUpdate()
         {
-            if (console != null && Input.GetKeyDown(KeyCode.Backslash) && !CoreCache.Input.InputBlocked)
+            if (_enabled)
             {
-                console.gameObject.SetActive(!_enabled);
+                ProcessKeyInput();
+            }
 
-                if (!_enabled)
+            if (Input.GetKeyDown(KeyCode.Backslash) && (!CoreCache.Input.InputBlocked && CoreCache.Room.CurrentRoom != null || _enabled))
+            {
+                _enabled = !_enabled;
+                consoleObject.gameObject.SetActive(_enabled);
+
+                if (_enabled)
                     OnEnable();
                 else
                     OnDisable();
-                _enabled = !_enabled;
-            }
-
-            LogWarning("Blocked: " + CoreCache.Input.InputBlocked);
-            if (_enabled)
-            {
-                //EventSystem.current.SetSelectedGameObject(null);
-            }
-        }
-
-        public void LateUpdate()
-        {
-            if (_enabled)
-            {
-                //EventSystem.current.SetSelectedGameObject(console.gameObject);
             }
         }
 
         private void OnEnable()
         {
-            LogWarning("Console enabled");
-            //CoreCache.Time.RequestApplicationPause();
+            LogWarning("Enabling console");
             CoreCache.Input.SetInputBlock(true, false);
-            //EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.sendNavigationEvents = false;//.GetComponent<StandaloneInputModule>().
-            //input.OnPointerClick(new PointerEventData(EventSystem.current));
-            //input.ActivateInputField();
+            ResetConsole();
         }
 
         private void OnDisable()
         {
-            //EventSystem.current.GetComponent<StandaloneInputModule>().enabled = true;
-            EventSystem.current.sendNavigationEvents = true;
-            LogWarning("Console disabled");
+            LogWarning("Disabling console");
             CoreCache.Input.ClearAllInputBlocks();
-            //CoreCache.Time.RequestApplicationResume();
         }
-    }
 
-    [HarmonyPatch(typeof(EventSystem), nameof(EventSystem.SetSelectedGameObject), typeof(GameObject))]
-    class test
-    {
-        public static bool Prefix()
+        private void ProcessKeyInput()
         {
-            return !Main.CheatConsole.Enabled;
+            foreach (char c in Input.inputString)
+            {
+                // Backspace
+                if (c == '\b')
+                {
+                    if (_currentText.Length > 0)
+                        _currentText = _currentText[..^1];
+                }
+                // Confirm
+                else if (c == '\n' || c == '\r')
+                {
+                    ProcessCommand(_currentText);
+                    ResetConsole();
+                }
+                // Regular character
+                else
+                {
+                    _currentText += c;
+                }
+            }
+
+            bool hasText = _currentText.Length > 0;
+
+            consoleText.text = hasText ? _currentText : "Begin typing a command...";
+            consoleText.fontStyle = hasText ? FontStyles.Normal : FontStyles.Italic;
+            consoleText.color = hasText ? Color.white : Color.gray;
         }
+
+        private void ResetConsole()
+        {
+            _currentText = string.Empty;
+        }
+
+        private void ProcessCommand(string command)
+        {
+            Log("Processing command: " + command);
+        }
+
+        private string _currentText = string.Empty;
     }
-
-    //private void CreateConsoleUI()
-    //{
-    //    console = UIModder.CreateRect("CheatConsole")
-    //        .SetSize(400, 200)
-    //        .SetPivot(Vector2.zero)
-    //        .AddImage()
-    //        .SetColor(new Color(0.15f, 0.15f, 0.15f, 0.8f))
-    //        .rectTransform;
-
-    //    var child = UIModder.CreateRect("Input", console)
-    //        .SetXRange(0.5f, 0.5f).SetYRange(0, 0)
-    //        .SetPivot(0.5f, 0)
-    //        .SetSize(400, 30);
-    //    //.SetPosition(5, -5)
-    //    //.AddImage()
-    //    //.SetColor(Color.blue);
-
-    //    var text = UIModder.CreateRect("Text", child)
-    //        //.SetXRange(0, 1).SetYRange(0, 1)
-    //        //.SetPivot(0, 0)
-    //        .SetPosition(10, 0)
-    //        .SetSize(390, 30)
-    //    //.AddImage()
-    //    //.SetColor(new Color(1, 0, 0, 0.5f))
-    //    //.rectTransform;
-    //    .AddText()
-    //    .SetFontSize(24)
-    //    .SetAlignment(TextAlignmentOptions.Left);
-
-    //    console.gameObject.SetActive(false);
-    //    //(Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font);
-
-    //    input = child.gameObject.AddComponent<TMP_InputField>();
-    //    input.transition = Selectable.Transition.None;
-    //    input.textViewport = text.rectTransform;
-    //    input.textComponent = text;
-
-    //    input.text = "Test";
-    //}
 }

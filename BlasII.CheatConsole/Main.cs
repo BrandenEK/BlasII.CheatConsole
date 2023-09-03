@@ -10,10 +10,5 @@ namespace BlasII.CheatConsole
         {
             CheatConsole = new CheatConsole();
         }
-
-        public override void OnLateUpdate()
-        {
-            CheatConsole.LateUpdate();
-        }
     }
 }

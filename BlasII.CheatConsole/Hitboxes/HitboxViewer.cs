@@ -1,6 +1,9 @@
 ﻿using Il2CppInterop.Runtime;
+using Il2CppTGK.Game.Components.Persistence;
+using Il2CppTGK.Game.Components;
 using System.Collections.Generic;
 using UnityEngine;
+using Il2CppTGK.Game.Components.Attack;
 
 namespace BlasII.CheatConsole.Hitboxes
 {
@@ -8,7 +11,7 @@ namespace BlasII.CheatConsole.Hitboxes
     {
         private const string GEOMETRY_NAME = "GEO_Block";
 
-        private readonly Dictionary<int, AbstractHitbox> _activeHitboxes = new();
+        private readonly Dictionary<int, LineRenderer> _activeHitboxes = new();
 
         private bool _showHitboxes = false;
 
@@ -66,16 +69,17 @@ namespace BlasII.CheatConsole.Hitboxes
             if (_showHitboxes)
                 AddHitboxes();
 
-            var list = new List<string>();
-            foreach (var c in Object.FindObjectsOfType<Collider2D>())
-            {
-                string name = c.GetIl2CppType().Name;
-                if (!list.Contains(name))
-                {
-                    Main.CheatConsole.Log(c.name + ": " + name);
-                    list.Add(name);
-                }
-            }
+            //var list = new List<string>();
+            //foreach (var c in Object.FindObjectsOfType<AttackHit>())
+            //{
+            //    Main.CheatConsole.Log(c.name);
+            //    //if (c.name.StartsWith("dark_forest"))
+            //    //{
+            //    //    Main.CheatConsole.Log(c.transform.DisplayHierarchy(5, true));
+            //    //    //foreach (var comp in c.gameObject.GetComponents<Component>())
+            //    //    //    Main.CheatConsole.LogWarning(comp.ToString());
+            //    //}
+            //}
         }
 
         public void SceneUnloaded()
@@ -106,20 +110,22 @@ namespace BlasII.CheatConsole.Hitboxes
             var foundColliders = new List<int>();
             foreach (Collider2D collider in Object.FindObjectsOfType<Collider2D>(true))
             {
-                if (!HitboxConfig.showGeometry && collider.name.StartsWith(GEOMETRY_NAME))
-                    continue;
+                //if (!HitboxConfig.showGeometry && collider.name.StartsWith(GEOMETRY_NAME))
+                //    continue;
+
+                //Main.CheatConsole.Log(collider.name + ": " + collider.GetIl2CppType().Name + ". Composite: " + collider.usedByComposite);
 
                 // Make sure the collider is a valid type
                 string colliderType = collider.GetIl2CppType().Name;
-                if (colliderType != "BoxCollider2D" && colliderType != "CircleCollider2D")
+                if (colliderType != "BoxCollider2D" && colliderType != "CircleCollider2D" && colliderType != "PolygonCollider2D")
                 {
                     continue;
                 }
 
-                if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out AbstractHitbox abstractHitbox))
+                if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out LineRenderer line))
                 {
                     // If the collider is already stored, just update the colors
-                    abstractHitbox.UpdateColors();
+                    SetColor(line, collider);
                 }
                 else
                 {
@@ -127,27 +133,28 @@ namespace BlasII.CheatConsole.Hitboxes
                     obj.transform.parent = collider.transform;
                     obj.transform.localPosition = Vector3.zero;
 
-                    var lr = obj.AddComponent<LineRenderer>();
-                    lr.material = RendererMaterial;
-                    lr.useWorldSpace = false;
+                    line = obj.AddComponent<LineRenderer>();
+                    line.material = RendererMaterial;
+                    line.useWorldSpace = false;
 
                     float width = 0.04f;
-                    lr.SetWidth(width, width);
+                    line.SetWidth(width, width);
 
-                    // Create new hitbox of certain type and call setup
-                    if (colliderType == "BoxCollider2D")
+                    switch (colliderType)
                     {
-                        BoxHitbox boxHitbox = obj.AddComponent(Il2CppType.From(typeof(BoxHitbox))).Cast<BoxHitbox>();
-                        boxHitbox.SetupBox(collider.Cast<BoxCollider2D>(), lr);
-                        _activeHitboxes.Add(collider.gameObject.GetInstanceID(), boxHitbox);
+                        case "BoxCollider2D":
+                            SetupBox(line, collider.Cast<BoxCollider2D>());
+                            break;
+                        case "CircleCollider2D":
+                            SetupCircle(line, collider.Cast<CircleCollider2D>());
+                            break;
+                        case "PolygonCollider2D":
+                            SetupPolygon(line, collider.Cast<PolygonCollider2D>());
+                            break;
                     }
-                    else if (colliderType == "CircleCollider2D")
-                    {
-                        CircleHitbox circleHitbox = obj.AddComponent(Il2CppType.From(typeof(CircleHitbox))).Cast<CircleHitbox>();
-                        circleHitbox.SetupCircle(collider.Cast<CircleCollider2D>(), lr);
-                        _activeHitboxes.Add(collider.gameObject.GetInstanceID(), circleHitbox);
-                    }
+                    SetColor(line, collider);
 
+                    _activeHitboxes.Add(collider.gameObject.GetInstanceID(), line);
                     newColliders++;
                 }
 
@@ -174,9 +181,120 @@ namespace BlasII.CheatConsole.Hitboxes
             ResetTimer();
         }
 
+        private void SetupBox(LineRenderer renderer, BoxCollider2D collider)
+        {
+            if (collider.size.x >= 15 || collider.size.y >= 15 || collider.size.x <= 0.1f || collider.size.y <= 0.1f)
+                return;
+
+            Vector2 halfSize = collider.size / 2f;
+            Vector2 topLeft = new(-halfSize.x, halfSize.y);
+            Vector2 topRight = halfSize;
+            Vector2 bottomRight = new(halfSize.x, -halfSize.y);
+            Vector2 bottomLeft = -halfSize;
+            Vector2[] points = new Vector2[]
+            {
+                topLeft, topRight, bottomRight, bottomLeft, topLeft
+            };
+
+            renderer.positionCount = 5;
+            for (int i = 0; i < points.Length; i++)
+            {
+                renderer.SetPosition(i, collider.offset + points[i]);
+            }
+        }
+
+        private void SetupCircle(LineRenderer renderer, CircleCollider2D collider)
+        {
+            if (collider.radius >= 5 || collider.radius <= 0.1f)
+                return;
+
+            int steps = 100;
+            float radius = collider.radius;
+
+            renderer.positionCount = steps;
+            for (int currentStep = 0; currentStep < steps; currentStep++)
+            {
+                float circumferenceProgress = (float)currentStep / (steps - 1);
+
+                float currentRadian = circumferenceProgress * 2 * Mathf.PI;
+
+                float xScaled = Mathf.Cos(currentRadian);
+                float yScaled = Mathf.Sin(currentRadian);
+
+                var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
+                renderer.SetPosition(currentStep, collider.offset + currentPosition);
+            }
+        }
+
+        private void SetupPolygon(LineRenderer renderer, PolygonCollider2D collider)
+        {
+            if (collider.pathCount > 0)
+            {
+                var points = new List<Vector2>(collider.GetPath(0));
+                if (points.Count > 0)
+                    points.Add(points[0]);
+
+                renderer.positionCount = points.Count;
+                for (int i = 0; i < points.Count; i++)
+                {
+                    renderer.SetPosition(i, collider.offset + points[i]);
+                }
+            }
+        }
+
+        public void SetColor(LineRenderer renderer, Collider2D collider)
+        {
+            Color color;
+            int order;
+            if (!Main.CheatConsole.HitboxViewer.HitboxConfig.useColor)
+            {
+                color = Color.green;
+                order = 0;
+            }
+            else if (!collider.isActiveAndEnabled)
+            {
+                color = Color.gray;
+                order = 20;
+            }
+            else if (collider.name.StartsWith("GEO_"))
+            {
+                color = Color.green;
+                order = 30;
+            }
+            else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
+            {
+                color = Color.cyan;
+                order = 100;
+            }
+            else if (collider.transform.HasComponentInParent<AliveEntity>())
+            {
+                color = Color.red;
+                order = 80;
+            }
+            else if (collider.transform.GetComponent<AttackHit>() != null/*collider.name.StartsWith("InstaDeath")*/)
+            {
+                color = Color.magenta;
+                order = 50;
+            }
+            else if (collider.isTrigger)
+            {
+                color = Color.blue;
+                order = 60;
+            }
+            else
+            {
+                color = Color.yellow;
+                order = 40;
+            }
+
+            renderer.SetColors(color, color);
+            renderer.sortingOrder = order;
+        }
+
+
         private void RemoveHitboxes()
         {
-            foreach (AbstractHitbox hitbox in _activeHitboxes.Values)
+            foreach (LineRenderer hitbox in _activeHitboxes.Values)
             {
                 if (hitbox != null && hitbox.gameObject != null)
                     Object.Destroy(hitbox.gameObject);

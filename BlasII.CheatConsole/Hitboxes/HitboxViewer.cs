@@ -1,7 +1,6 @@
 ﻿using Il2CppInterop.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
-using static Il2CppTGK.Game.Components.Attack.WeaponAttacksHitboxes;
 
 namespace BlasII.CheatConsole.Hitboxes
 {

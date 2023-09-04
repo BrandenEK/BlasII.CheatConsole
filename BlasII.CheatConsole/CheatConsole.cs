@@ -38,6 +38,8 @@ namespace BlasII.CheatConsole
             if (!ClassInjector.IsTypeRegisteredInIl2Cpp<HitboxComponent>())
                 ClassInjector.RegisterTypeInIl2Cpp<HitboxComponent>();
 
+            HitboxViewer.Initialize();
+
             RegisterCommand(new BeadCommand());
             RegisterCommand(new LoadCommand());
         }

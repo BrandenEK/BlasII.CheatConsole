@@ -61,21 +61,51 @@ namespace BlasII.CheatConsole.Hitboxes
         public void UpdateColors()
         {
             Color color;
-            if (!collider.isActiveAndEnabled)
-                color = Color.gray;
-            else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
-                color = Color.cyan;
-            else if (collider.transform.HasComponentInParent<AliveEntity>())
-                color = Color.red;
-            else if (collider.isTrigger)
+            int order;
+            if (!Main.CheatConsole.HitboxViewer.HitboxConfig.useColor)
+            {
                 color = Color.green;
+                order = 0;
+            }
+            else if (!collider.isActiveAndEnabled)
+            {
+                color = Color.gray;
+                order = 20;
+            }
+            else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
+            {
+                color = Color.cyan;
+                order = 100;
+            }
+            else if (collider.transform.HasComponentInParent<AliveEntity>())
+            {
+                color = Color.red;
+                order = 80;
+
+            }
+            else if (collider.isTrigger)
+            {
+                color = Color.green;
+                order = 60;
+            }
             else
+            {
                 color = Color.yellow;
+                order = 40;
+            }
 
             top.color = color;
+            //top.sortingLayerName = "Foreground Parallax 1";
+            top.sortingOrder = order;
             left.color = color;
+            //left.sortingLayerName = "Foreground Parallax 1";
+            left.sortingOrder = order;
             right.color = color;
+            //right.sortingLayerName = "Foreground Parallax 1";
+            right.sortingOrder = order;
             bottom.color = color;
+            //bottom.sortingLayerName = "Foreground Parallax 1";
+            bottom.sortingOrder = order;
         }
     }
 }

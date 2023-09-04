@@ -12,10 +12,10 @@ namespace BlasII.CheatConsole.Hitboxes
 
         private bool _showHitboxes = false;
 
-        private readonly float _searchDelay = 1f;
         private float _currentDelay = 0f;
-        private bool inGame = false;
+        private bool _inGame = false;
 
+        public HitboxConfig HitboxConfig { get; private set; }
         public Sprite HitboxImage { get; private set; }
 
         private bool ShowHitboxes
@@ -38,9 +38,14 @@ namespace BlasII.CheatConsole.Hitboxes
             HitboxImage = Sprite.Create(tex, new Rect(0, 0, 1, 1), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
         }
 
+        public void Initialize()
+        {
+            HitboxConfig = new HitboxConfig(true, false, 1f);
+        }
+
         public void SceneLoaded()
         {
-            inGame = true;
+            _inGame = true;
             CreateHitboxImage();
 
             if (_showHitboxes)
@@ -51,15 +56,15 @@ namespace BlasII.CheatConsole.Hitboxes
         {
             RemoveHitboxes();
 
-            inGame = false;
+            _inGame = false;
         }
 
         public void Update()
         {
-            if (_showHitboxes && inGame)
+            if (_showHitboxes && _inGame)
             {
                 _currentDelay += Time.deltaTime;
-                if (_currentDelay >= _searchDelay)
+                if (_currentDelay >= HitboxConfig.updateDelay)
                     AddHitboxes();
             }
 
@@ -75,7 +80,7 @@ namespace BlasII.CheatConsole.Hitboxes
             var foundColliders = new List<int>();
             foreach (BoxCollider2D collider in Object.FindObjectsOfType<BoxCollider2D>(true))
             {
-                if (collider.name.StartsWith(GEOMETRY_NAME))
+                if (!HitboxConfig.showGeometry && collider.name.StartsWith(GEOMETRY_NAME))
                     continue;
 
                 if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out HitboxComponent hitbox))

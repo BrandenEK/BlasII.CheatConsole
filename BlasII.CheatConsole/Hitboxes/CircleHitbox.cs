@@ -4,60 +4,35 @@ namespace BlasII.CheatConsole.Hitboxes
 {
     public class CircleHitbox : AbstractHitbox
     {
-        public void SetupCircle(CircleCollider2D collider)
+        public void SetupCircle(CircleCollider2D collider, LineRenderer renderer)
         {
             if (collider.radius >= 5)
             {
                 // Hide circles that are really large
                 StoreCollider(collider);
+                StoreRenderer(renderer);
                 return;
             }
 
-            float xPos = collider.offset.x;
-            float yPos = collider.offset.y;
-            float lineWidth = LINE_WIDTH / collider.transform.localScale.x;
-            float lineHeight = LINE_WIDTH / collider.transform.localScale.y;
-            float colliderFullRadius = collider.radius;
-            float colliderHalfRadius = collider.radius / 2;
-            float colliderQuarterRadius = collider.radius / 4;
+            int steps = 100;
+            float radius = collider.radius;
 
-            CreateLine("TOP",
-                new Vector2(xPos - colliderHalfRadius, yPos + colliderFullRadius),
-                new Vector2(collider.radius, lineHeight));
+            renderer.positionCount = steps;
+            for (int currentStep = 0; currentStep < steps; currentStep++)
+            {
+                float circumferenceProgress = (float)currentStep / (steps - 1);
 
-            CreateLine("LEFT",
-                new Vector2(xPos - colliderFullRadius, yPos - colliderHalfRadius),
-                new Vector2(lineWidth, collider.radius));
+                float currentRadian = circumferenceProgress * 2 * Mathf.PI;
 
-            CreateLine("RIGHT",
-                new Vector2(xPos + colliderFullRadius, yPos - colliderHalfRadius),
-                new Vector2(lineWidth, collider.radius));
+                float xScaled = Mathf.Cos(currentRadian);
+                float yScaled = Mathf.Sin(currentRadian);
 
-            CreateLine("BOTTOM",
-                new Vector2(xPos - colliderHalfRadius, yPos - colliderFullRadius),
-                new Vector2(collider.radius, lineHeight));
-
-            CreateLine("TOPLEFT",
-                new Vector2(xPos - colliderFullRadius + lineWidth, yPos + colliderHalfRadius),
-                new Vector2(colliderHalfRadius + colliderQuarterRadius - lineWidth, lineHeight),
-                45);
-
-            CreateLine("TOPRIGHT",
-                new Vector2(xPos + colliderFullRadius + lineWidth, yPos + colliderHalfRadius),
-                new Vector2(colliderHalfRadius + colliderQuarterRadius, lineHeight),
-                135);
-
-            CreateLine("BOTTOMLEFT",
-                new Vector2(xPos - colliderHalfRadius + lineWidth, yPos - colliderFullRadius),
-                new Vector2(colliderHalfRadius + colliderQuarterRadius, lineHeight),
-                135);
-
-            CreateLine("BOTTOMRIGHT",
-                new Vector2(xPos + colliderHalfRadius + lineWidth, yPos - colliderFullRadius),
-                new Vector2(colliderHalfRadius + colliderQuarterRadius - lineWidth, lineHeight),
-                45);
+                var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
+                renderer.SetPosition(currentStep, collider.offset + currentPosition);
+            }
 
             StoreCollider(collider);
+            StoreRenderer(renderer);
             UpdateColors();
         }
     }

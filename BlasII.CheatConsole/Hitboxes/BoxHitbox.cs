@@ -4,39 +4,34 @@ namespace BlasII.CheatConsole.Hitboxes
 {
     public class BoxHitbox : AbstractHitbox
     {
-        public void SetupBox(BoxCollider2D collider)
+        public void SetupBox(BoxCollider2D collider, LineRenderer renderer)
         {
             if (collider.size.x >= 15 || collider.size.y >= 15)
             {
                 // Hide boxes that are really large
                 StoreCollider(collider);
+                StoreRenderer(renderer);
                 return;
             }
 
-            float xPos = collider.offset.x;
-            float yPos = collider.offset.y;
-            float lineWidth = LINE_WIDTH / collider.transform.localScale.x;
-            float lineHeight = LINE_WIDTH / collider.transform.localScale.y;
-            float colliderHalfWidth = collider.size.x / 2;
-            float colliderHalfHeight = collider.size.y / 2;
+            Vector2 halfSize = collider.size / 2f;
+            Vector2 topLeft = new(-halfSize.x, halfSize.y);
+            Vector2 topRight = halfSize;
+            Vector2 bottomRight = new(halfSize.x, -halfSize.y);
+            Vector2 bottomLeft = -halfSize;
+            Vector2[] points = new Vector2[]
+            {
+                topLeft, topRight, bottomRight, bottomLeft, topLeft
+            };
 
-            CreateLine("TOP",
-                new Vector2(xPos - colliderHalfWidth, yPos + colliderHalfHeight),
-                new Vector2(collider.size.x + LINE_WIDTH, lineHeight));
-
-            CreateLine("LEFT",
-                new Vector2(xPos - colliderHalfWidth, yPos - colliderHalfHeight),
-                new Vector2(lineWidth, collider.size.y));
-
-            CreateLine("RIGHT",
-                new Vector2(xPos + colliderHalfWidth, yPos - colliderHalfHeight),
-                new Vector2(lineWidth, collider.size.y));
-
-            CreateLine("BOTTOM",
-                new Vector2(xPos - colliderHalfWidth, yPos - colliderHalfHeight),
-                new Vector2(collider.size.x + LINE_WIDTH, lineHeight));
+            renderer.positionCount = 5;
+            for (int i = 0; i < points.Length; i++)
+            {
+                renderer.SetPosition(i, collider.offset + points[i]);
+            }
 
             StoreCollider(collider);
+            StoreRenderer(renderer);
             UpdateColors();
         }
     }

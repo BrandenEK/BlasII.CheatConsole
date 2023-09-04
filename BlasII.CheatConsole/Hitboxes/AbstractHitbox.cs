@@ -1,20 +1,16 @@
 ﻿using Il2CppTGK.Game.Components.Persistence;
 using Il2CppTGK.Game.Components;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BlasII.CheatConsole.Hitboxes
 {
     public abstract class AbstractHitbox : MonoBehaviour
     {
-        protected const float LINE_WIDTH = 0.03f;
-
         private Collider2D _collider;
-        private readonly List<SpriteRenderer> _renderers = new();
+        private LineRenderer _lineRenderer;
 
         protected void StoreCollider(Collider2D collider) => _collider = collider;
-
-        protected void AddRenderer(SpriteRenderer renderer) => _renderers.Add(renderer);
+        protected void StoreRenderer(LineRenderer renderer) => _lineRenderer = renderer;
 
         public void UpdateColors()
         {
@@ -52,24 +48,8 @@ namespace BlasII.CheatConsole.Hitboxes
                 order = 40;
             }
 
-            foreach (SpriteRenderer sr in _renderers)
-            {
-                sr.color = color;
-                //sr.sortingLayerName = "Foreground Parallax 1";
-                sr.sortingOrder = order;
-            }
-        }
-
-        protected void CreateLine(string name, Vector2 position, Vector2 scale, float rotation = 0)
-        {
-            var obj = new GameObject(name);
-            obj.transform.parent = transform;
-            obj.transform.localPosition = position;
-            obj.transform.localScale = scale;
-            obj.transform.localEulerAngles = new Vector3(0, 0, rotation);
-            var sr = obj.AddComponent<SpriteRenderer>();
-            sr.sprite = Main.CheatConsole.HitboxViewer.HitboxImage;
-            AddRenderer(sr);
+            _lineRenderer.SetColors(color, color);
+            _lineRenderer.sortingOrder = order;
         }
     }
 }

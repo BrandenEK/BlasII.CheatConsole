@@ -30,6 +30,21 @@ namespace BlasII.CheatConsole.Hitboxes
             }
         }
 
+        private Material _material;
+        public Material RendererMaterial
+        {
+            get
+            {
+                if (_material == null)
+                {
+                    var obj = new GameObject("Temp");
+                    _material = obj.AddComponent<SpriteRenderer>().material;
+                    Object.Destroy(obj);
+                }
+                return _material;
+            }
+        }
+
         public void CreateHitboxImage()
         {
             var tex = new Texture2D(1, 1, TextureFormat.RGB24, false);
@@ -112,17 +127,24 @@ namespace BlasII.CheatConsole.Hitboxes
                     obj.transform.parent = collider.transform;
                     obj.transform.localPosition = Vector3.zero;
 
+                    var lr = obj.AddComponent<LineRenderer>();
+                    lr.material = RendererMaterial;
+                    lr.useWorldSpace = false;
+
+                    float width = 0.04f;
+                    lr.SetWidth(width, width);
+
                     // Create new hitbox of certain type and call setup
                     if (colliderType == "BoxCollider2D")
                     {
                         BoxHitbox boxHitbox = obj.AddComponent(Il2CppType.From(typeof(BoxHitbox))).Cast<BoxHitbox>();
-                        boxHitbox.SetupBox(collider.Cast<BoxCollider2D>());
+                        boxHitbox.SetupBox(collider.Cast<BoxCollider2D>(), lr);
                         _activeHitboxes.Add(collider.gameObject.GetInstanceID(), boxHitbox);
                     }
                     else if (colliderType == "CircleCollider2D")
                     {
                         CircleHitbox circleHitbox = obj.AddComponent(Il2CppType.From(typeof(CircleHitbox))).Cast<CircleHitbox>();
-                        circleHitbox.SetupCircle(collider.Cast<CircleCollider2D>());
+                        circleHitbox.SetupCircle(collider.Cast<CircleCollider2D>(), lr);
                         _activeHitboxes.Add(collider.gameObject.GetInstanceID(), circleHitbox);
                     }
 

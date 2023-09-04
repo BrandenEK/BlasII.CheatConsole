@@ -12,7 +12,7 @@ namespace BlasII.CheatConsole.Commands
             if (!ValidateParameterCount("add", parameters, 1))
                 return;
 
-            Main.CheatConsole.LogWarning("Adding bead: " + parameters[0]);
+            Write("Adding bead: " + parameters[0]);
         }
 
         private void RemoveBead(string[] parameters)
@@ -20,7 +20,7 @@ namespace BlasII.CheatConsole.Commands
             if (!ValidateParameterCount("remove", parameters, 1))
                 return;
 
-            Main.CheatConsole.LogWarning("Removing bead: " + parameters[0]);
+            Write("Removing bead: " + parameters[0]);
         }
 
         protected override Dictionary<string, Action<string[]>> RegisterSubcommands()

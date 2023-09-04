@@ -46,6 +46,10 @@ namespace BlasII.CheatConsole.Commands
             return isValid;
         }
 
+        protected void Write(string message) => Main.CheatConsole.Log("[CONSOLE] " + message);
+
+        protected void WriteFailure(string message) => Main.CheatConsole.LogError("[CONSOLE] " + message);
+
         protected abstract Dictionary<string, Action<string[]>> RegisterSubcommands();
     }
 }

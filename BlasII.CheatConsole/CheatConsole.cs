@@ -32,6 +32,16 @@ namespace BlasII.CheatConsole
         protected override void OnInitialize()
         {
             RegisterCommand(new BeadCommand());
+            RegisterCommand(new LoadCommand());
+        }
+
+        protected override void OnSceneUnloaded(string sceneName)
+        {
+            if (_enabled)
+            {
+                _enabled = false;
+                GetConsoleObject().gameObject.SetActive(false);
+            }
         }
 
         protected override void OnUpdate()
@@ -105,7 +115,7 @@ namespace BlasII.CheatConsole
 
         private void ProcessCommand(string command)
         {
-            Log("[CONSOLE] " + command);
+            LogCustom("[CONSOLE] " + command, System.Drawing.Color.White);
             string[] parts = command.Trim().ToLower().Split(' ');
 
             if (parts.Length < 1)
@@ -115,7 +125,7 @@ namespace BlasII.CheatConsole
 
             if (!_commands.ContainsKey(parts[0]))
             {
-                LogError($"Command '{parts[0]}' is not a valid command!");
+                LogError($"[CONSOLE] Command '{parts[0]}' is not a valid command!");
                 return;
             }
 

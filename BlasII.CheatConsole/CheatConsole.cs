@@ -35,8 +35,12 @@ namespace BlasII.CheatConsole
 
         protected override void OnInitialize()
         {
-            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<HitboxComponent>())
-                ClassInjector.RegisterTypeInIl2Cpp<HitboxComponent>();
+            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<AbstractHitbox>())
+                ClassInjector.RegisterTypeInIl2Cpp<AbstractHitbox>();
+            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<BoxHitbox>())
+                ClassInjector.RegisterTypeInIl2Cpp<BoxHitbox>();
+            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<CircleHitbox>())
+                ClassInjector.RegisterTypeInIl2Cpp<CircleHitbox>();
 
             HitboxViewer.Initialize();
 

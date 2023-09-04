@@ -1,6 +1,7 @@
 ﻿using Il2CppInterop.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
+using static Il2CppTGK.Game.Components.Attack.WeaponAttacksHitboxes;
 
 namespace BlasII.CheatConsole.Hitboxes
 {
@@ -8,7 +9,7 @@ namespace BlasII.CheatConsole.Hitboxes
     {
         private const string GEOMETRY_NAME = "GEO_Block";
 
-        private readonly Dictionary<int, HitboxComponent> _activeHitboxes = new();
+        private readonly Dictionary<int, AbstractHitbox> _activeHitboxes = new();
 
         private bool _showHitboxes = false;
 
@@ -50,6 +51,17 @@ namespace BlasII.CheatConsole.Hitboxes
 
             if (_showHitboxes)
                 AddHitboxes();
+
+            var list = new List<string>();
+            foreach (var c in Object.FindObjectsOfType<Collider2D>())
+            {
+                string name = c.GetIl2CppType().Name;
+                if (!list.Contains(name))
+                {
+                    Main.CheatConsole.Log(c.name + ": " + name);
+                    list.Add(name);
+                }
+            }
         }
 
         public void SceneUnloaded()
@@ -78,14 +90,22 @@ namespace BlasII.CheatConsole.Hitboxes
 
             // Foreach collider in the scene, either add it or update it
             var foundColliders = new List<int>();
-            foreach (BoxCollider2D collider in Object.FindObjectsOfType<BoxCollider2D>(true))
+            foreach (Collider2D collider in Object.FindObjectsOfType<Collider2D>(true))
             {
                 if (!HitboxConfig.showGeometry && collider.name.StartsWith(GEOMETRY_NAME))
                     continue;
 
-                if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out HitboxComponent hitbox))
+                // Make sure the collider is a valid type
+                string colliderType = collider.GetIl2CppType().Name;
+                if (colliderType != "BoxCollider2D" && colliderType != "CircleCollider2D")
                 {
-                    hitbox.UpdateColors();
+                    continue;
+                }
+
+                if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out AbstractHitbox abstractHitbox))
+                {
+                    // If the collider is already stored, just update the colors
+                    abstractHitbox.UpdateColors();
                 }
                 else
                 {
@@ -93,10 +113,20 @@ namespace BlasII.CheatConsole.Hitboxes
                     obj.transform.parent = collider.transform;
                     obj.transform.localPosition = Vector3.zero;
 
-                    hitbox = obj.AddComponent(Il2CppType.From(typeof(HitboxComponent))).Cast<HitboxComponent>();
-                    hitbox.Setup(collider);
+                    // Create new hitbox of certain type and call setup
+                    if (colliderType == "BoxCollider2D")
+                    {
+                        BoxHitbox boxHitbox = obj.AddComponent(Il2CppType.From(typeof(BoxHitbox))).Cast<BoxHitbox>();
+                        boxHitbox.SetupBox(collider.Cast<BoxCollider2D>());
+                        _activeHitboxes.Add(collider.gameObject.GetInstanceID(), boxHitbox);
+                    }
+                    else if (colliderType == "CircleCollider2D")
+                    {
+                        CircleHitbox circleHitbox = obj.AddComponent(Il2CppType.From(typeof(CircleHitbox))).Cast<CircleHitbox>();
+                        circleHitbox.SetupCircle(collider.Cast<CircleCollider2D>());
+                        _activeHitboxes.Add(collider.gameObject.GetInstanceID(), circleHitbox);
+                    }
 
-                    _activeHitboxes.Add(collider.gameObject.GetInstanceID(), hitbox);
                     newColliders++;
                 }
 
@@ -125,7 +155,7 @@ namespace BlasII.CheatConsole.Hitboxes
 
         private void RemoveHitboxes()
         {
-            foreach (HitboxComponent hitbox in _activeHitboxes.Values)
+            foreach (AbstractHitbox hitbox in _activeHitboxes.Values)
             {
                 if (hitbox != null && hitbox.gameObject != null)
                     Object.Destroy(hitbox.gameObject);

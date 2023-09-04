@@ -6,6 +6,13 @@ namespace BlasII.CheatConsole.Hitboxes
     {
         public void SetupBox(BoxCollider2D collider)
         {
+            if (collider.size.x >= 15 || collider.size.y >= 15)
+            {
+                // Hide boxes that are really large
+                StoreCollider(collider);
+                return;
+            }
+
             float xPos = collider.offset.x;
             float yPos = collider.offset.y;
             float lineWidth = LINE_WIDTH / collider.transform.localScale.x;

@@ -60,12 +60,13 @@ namespace BlasII.CheatConsole.Hitboxes
             }
         }
 
-        protected void CreateLine(string name, Vector2 position, Vector2 scale)
+        protected void CreateLine(string name, Vector2 position, Vector2 scale, float rotation = 0)
         {
             var obj = new GameObject(name);
             obj.transform.parent = transform;
             obj.transform.localPosition = position;
             obj.transform.localScale = scale;
+            obj.transform.localEulerAngles = new Vector3(0, 0, rotation);
             var sr = obj.AddComponent<SpriteRenderer>();
             sr.sprite = Main.CheatConsole.HitboxViewer.HitboxImage;
             AddRenderer(sr);

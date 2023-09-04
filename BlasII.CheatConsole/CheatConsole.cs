@@ -18,6 +18,8 @@ namespace BlasII.CheatConsole
         private bool _enabled = false;
         private string _currentText = string.Empty;
 
+        public HitboxViewer HitboxViewer { get; private set; } = new();
+
         public CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
         public void RegisterCommand(BaseCommand command)
@@ -35,17 +37,26 @@ namespace BlasII.CheatConsole
             RegisterCommand(new LoadCommand());
         }
 
+        protected override void OnSceneLoaded(string sceneName)
+        {
+            HitboxViewer.SceneLoaded(sceneName);
+        }
+
         protected override void OnSceneUnloaded(string sceneName)
         {
+            HitboxViewer.SceneUnloaded();
+
             if (_enabled)
             {
                 _enabled = false;
                 GetConsoleObject().gameObject.SetActive(false);
             }
-        }
+        }        
 
         protected override void OnUpdate()
         {
+            HitboxViewer.Update();
+
             if (_enabled)
             {
                 ProcessKeyInput();

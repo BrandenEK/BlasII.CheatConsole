@@ -2,7 +2,6 @@
 using BlasII.CheatConsole.Hitboxes;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.UI;
-using Il2CppInterop.Runtime.Injection;
 using Il2CppTGK.Game;
 using Il2CppTMPro;
 using System.Collections.Generic;
@@ -35,13 +34,6 @@ namespace BlasII.CheatConsole
 
         protected override void OnInitialize()
         {
-            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<AbstractHitbox>())
-                ClassInjector.RegisterTypeInIl2Cpp<AbstractHitbox>();
-            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<BoxHitbox>())
-                ClassInjector.RegisterTypeInIl2Cpp<BoxHitbox>();
-            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<CircleHitbox>())
-                ClassInjector.RegisterTypeInIl2Cpp<CircleHitbox>();
-
             HitboxViewer.Initialize();
 
             RegisterCommand(new BeadCommand());

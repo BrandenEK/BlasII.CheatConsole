@@ -1,9 +1,8 @@
-﻿using Il2CppInterop.Runtime;
+﻿using Il2CppTGK.Game.Components.Attack;
 using Il2CppTGK.Game.Components.Persistence;
 using Il2CppTGK.Game.Components;
 using System.Collections.Generic;
 using UnityEngine;
-using Il2CppTGK.Game.Components.Attack;
 
 namespace BlasII.CheatConsole.Hitboxes
 {
@@ -68,18 +67,6 @@ namespace BlasII.CheatConsole.Hitboxes
 
             if (_showHitboxes)
                 AddHitboxes();
-
-            //var list = new List<string>();
-            //foreach (var c in Object.FindObjectsOfType<AttackHit>())
-            //{
-            //    Main.CheatConsole.Log(c.name);
-            //    //if (c.name.StartsWith("dark_forest"))
-            //    //{
-            //    //    Main.CheatConsole.Log(c.transform.DisplayHierarchy(5, true));
-            //    //    //foreach (var comp in c.gameObject.GetComponents<Component>())
-            //    //    //    Main.CheatConsole.LogWarning(comp.ToString());
-            //    //}
-            //}
         }
 
         public void SceneUnloaded()
@@ -113,8 +100,6 @@ namespace BlasII.CheatConsole.Hitboxes
                 //if (!HitboxConfig.showGeometry && collider.name.StartsWith(GEOMETRY_NAME))
                 //    continue;
 
-                //Main.CheatConsole.Log(collider.name + ": " + collider.GetIl2CppType().Name + ". Composite: " + collider.usedByComposite);
-
                 // Make sure the collider is a valid type
                 string colliderType = collider.GetIl2CppType().Name;
                 if (colliderType != "BoxCollider2D" && colliderType != "CircleCollider2D" && colliderType != "PolygonCollider2D")
@@ -129,6 +114,7 @@ namespace BlasII.CheatConsole.Hitboxes
                 }
                 else
                 {
+                    // Move this out into helper function
                     var obj = new GameObject("Hitbox");
                     obj.transform.parent = collider.transform;
                     obj.transform.localPosition = Vector3.zero;
@@ -271,7 +257,7 @@ namespace BlasII.CheatConsole.Hitboxes
                 color = Color.red;
                 order = 80;
             }
-            else if (collider.transform.GetComponent<AttackHit>() != null/*collider.name.StartsWith("InstaDeath")*/)
+            else if (collider.transform.GetComponent<AttackHit>() != null)
             {
                 color = Color.magenta;
                 order = 50;

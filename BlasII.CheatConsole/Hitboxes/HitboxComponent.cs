@@ -54,6 +54,8 @@ namespace BlasII.CheatConsole.Hitboxes
             obj.transform.localScale = new Vector3(collider.size.x + LINE_WIDTH, lineHeight, 0);
             bottom = obj.AddComponent<SpriteRenderer>();
             bottom.sprite = Main.CheatConsole.HitboxViewer.HitboxImage;
+
+            UpdateColors();
         }
 
         public void UpdateColors()

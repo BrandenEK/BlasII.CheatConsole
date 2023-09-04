@@ -1,6 +1,4 @@
-﻿using BlasII.CheatConsole.Hitboxes;
-using Il2CppInterop.Runtime.Injection;
-using MelonLoader;
+﻿using MelonLoader;
 
 namespace BlasII.CheatConsole
 {
@@ -10,9 +8,6 @@ namespace BlasII.CheatConsole
 
         public override void OnLateInitializeMelon()
         {
-            if (!ClassInjector.IsTypeRegisteredInIl2Cpp<HitboxComponent>())
-                ClassInjector.RegisterTypeInIl2Cpp<HitboxComponent>();
-
             CheatConsole = new CheatConsole();
         }
     }

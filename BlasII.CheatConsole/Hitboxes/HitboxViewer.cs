@@ -1,6 +1,4 @@
 ﻿using Il2CppInterop.Runtime;
-using Il2CppTGK.Game.Components;
-using Il2CppTGK.Game.Components.Persistence;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +6,6 @@ namespace BlasII.CheatConsole.Hitboxes
 {
     public class HitboxViewer
     {
-        private const float LINE_WIDTH = 0.03f;
         private const string GEOMETRY_NAME = "GEO_Block";
 
         private readonly Dictionary<int, HitboxComponent> _activeHitboxes = new();
@@ -41,7 +38,7 @@ namespace BlasII.CheatConsole.Hitboxes
             HitboxImage = Sprite.Create(tex, new Rect(0, 0, 1, 1), Vector2.zero, 1, 0, SpriteMeshType.FullRect);
         }
 
-        public void SceneLoaded(string sceneName)
+        public void SceneLoaded()
         {
             inGame = true;
             CreateHitboxImage();
@@ -72,48 +69,52 @@ namespace BlasII.CheatConsole.Hitboxes
 
         private void AddHitboxes()
         {
-            int beforeCount = _activeHitboxes.Count;
+            float newColliders = 0;
 
-            // Remove any colliders that dont exist anymore
-            //List<GameObject> toRemove = new();
-            //foreach (int colliderId in _activeHitboxes.Keys)
-            //{
-            //    if (collider == null)
-            //        toRemove.Add(collider);
-            //}
-            //foreach (GameObject collider in toRemove)
-            //{
-            //    _activeHitboxes.Remove(collider);
-            //}
-
-            int midCount = _activeHitboxes.Count;
-
-            // Foreach collider in the scene, add it if it doesn't already exist
+            // Foreach collider in the scene, either add it or update it
+            var foundColliders = new List<int>();
             foreach (BoxCollider2D collider in Object.FindObjectsOfType<BoxCollider2D>(true))
             {
                 if (collider.name.StartsWith(GEOMETRY_NAME))
                     continue;
 
-                if (_activeHitboxes.ContainsKey(collider.gameObject.GetInstanceID()))
-                    continue;
+                if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out HitboxComponent hitbox))
+                {
+                    hitbox.UpdateColors();
+                }
+                else
+                {
+                    var obj = new GameObject("Hitbox");
+                    obj.transform.parent = collider.transform;
+                    obj.transform.localPosition = Vector3.zero;
 
-                var obj = new GameObject("Hitbox");
-                obj.transform.parent = collider.transform;
-                obj.transform.localPosition = Vector3.zero;
-                HitboxComponent hitbox = obj.AddComponent(Il2CppType.From(typeof(HitboxComponent))).Cast<HitboxComponent>();
-                hitbox.Setup(collider);
+                    hitbox = obj.AddComponent(Il2CppType.From(typeof(HitboxComponent))).Cast<HitboxComponent>();
+                    hitbox.Setup(collider);
 
-                hitbox.UpdateColors();
+                    _activeHitboxes.Add(collider.gameObject.GetInstanceID(), hitbox);
+                    newColliders++;
+                }
 
-                _activeHitboxes.Add(collider.gameObject.GetInstanceID(), hitbox);
+                foundColliders.Add(collider.gameObject.GetInstanceID());
             }
 
-            int afterCount = _activeHitboxes.Count;
+            // Foreach collider in the list that wasn't found, remove it
+            var destroyedColliders = new List<int>();
+            foreach (int colliderId in _activeHitboxes.Keys)
+            {
+                if (!foundColliders.Contains(colliderId))
+                    destroyedColliders.Add(colliderId);
+            }
+            foreach (int colliderId in destroyedColliders)
+            {
+                _activeHitboxes.Remove(colliderId);
+            }
 
-            Main.CheatConsole.LogWarning($"Removed {beforeCount - midCount} destroyed colliders from list");
-            Main.CheatConsole.LogWarning($"Added {afterCount - midCount} new colliders to list");
-            Main.CheatConsole.LogError($"Total active hitboxes: " + _activeHitboxes.Count);
-
+            // Log amounts and reset timer
+            if (destroyedColliders.Count > 0)
+                Main.CheatConsole.Log($"Removing {destroyedColliders.Count} old colliders");
+            if (newColliders > 0)
+                Main.CheatConsole.Log($"Adding {newColliders} new colliders");
             ResetTimer();
         }
 

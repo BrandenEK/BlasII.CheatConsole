@@ -1,4 +1,5 @@
 ﻿using BlasII.CheatConsole.Commands;
+using BlasII.CheatConsole.Hitboxes;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.UI;
 using Il2CppTGK.Game;

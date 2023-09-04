@@ -12,9 +12,13 @@ namespace BlasII.CheatConsole
 
         private bool _loadedImage = false;
         private Sprite _hitboxImage;
-        private readonly Dictionary<GameObject, GameObject> _activeHitboxes = new();
+        private readonly Dictionary<int, GameObject> _activeHitboxes = new();
 
         private bool _showHitboxes = false;
+
+        private readonly float _searchDelay = 1f;
+        private float _currentDelay = 0f;
+        private bool inGame = false;
 
         private bool ShowHitboxes
         {
@@ -40,6 +44,8 @@ namespace BlasII.CheatConsole
 
         public void SceneLoaded(string sceneName)
         {
+            inGame = true;
+
             if (!_loadedImage && sceneName != "MainMenu")
                 Initialize();
 
@@ -50,10 +56,19 @@ namespace BlasII.CheatConsole
         public void SceneUnloaded()
         {
             RemoveHitboxes();
+
+            inGame = false;
         }
 
         public void Update()
         {
+            if (_showHitboxes && inGame)
+            {
+                _currentDelay += Time.deltaTime;
+                if (_currentDelay >= _searchDelay)
+                    AddHitboxes();
+            }
+
             if (Input.GetKeyDown(KeyCode.Keypad8))
                 ShowHitboxes = !_showHitboxes;
         }
@@ -61,11 +76,30 @@ namespace BlasII.CheatConsole
         private void AddHitboxes()
         {
             GameObject baseHitbox = CreateBaseHitbox();
-            _activeHitboxes.Clear();
 
-            foreach (BoxCollider2D collider in Object.FindObjectsOfType<BoxCollider2D>())
+            int beforeCount = _activeHitboxes.Count;
+
+            // Remove any colliders that dont exist anymore
+            //List<GameObject> toRemove = new();
+            //foreach (int colliderId in _activeHitboxes.Keys)
+            //{
+            //    if (collider == null)
+            //        toRemove.Add(collider);
+            //}
+            //foreach (GameObject collider in toRemove)
+            //{
+            //    _activeHitboxes.Remove(collider);
+            //}
+
+            int midCount = _activeHitboxes.Count;
+
+            // Foreach collider in the scene, add it if it doesn't already exist
+            foreach (BoxCollider2D collider in Object.FindObjectsOfType<BoxCollider2D>(true))
             {
-                if (collider.name.StartsWith(GEOMETRY_NAME) || !collider.enabled)
+                if (collider.name.StartsWith(GEOMETRY_NAME))
+                    continue;
+
+                if (_activeHitboxes.ContainsKey(collider.gameObject.GetInstanceID()))
                     continue;
 
                 GameObject hitbox = Object.Instantiate(baseHitbox, collider.transform);
@@ -73,7 +107,9 @@ namespace BlasII.CheatConsole
                 hitbox.transform.localPosition = Vector3.zero;
 
                 Color color;
-                if (HasComponentInParent<PlayerPersistentComponent>(collider.gameObject))
+                if (!collider.isActiveAndEnabled)
+                    color = Color.gray;
+                else if (HasComponentInParent<PlayerPersistentComponent>(collider.gameObject))
                     color = Color.cyan;
                 else if (HasComponentInParent<AliveEntity>(collider.gameObject))
                     color = Color.red;
@@ -107,11 +143,16 @@ namespace BlasII.CheatConsole
                 side.localScale = new Vector3(collider.size.x + LINE_WIDTH, height, 0);
                 side.GetComponent<SpriteRenderer>().color = color;
 
-                _activeHitboxes.Add(collider.gameObject, hitbox);
+                _activeHitboxes.Add(collider.gameObject.GetInstanceID(), hitbox);
             }
 
+            int afterCount = _activeHitboxes.Count;
+
+            Main.CheatConsole.LogWarning($"Removed {beforeCount - midCount} destroyed colliders from list");
+            Main.CheatConsole.LogWarning($"Added {afterCount - midCount} new colliders to list");
+            Main.CheatConsole.LogError($"Total active hitboxes: " + _activeHitboxes.Count);
+
             Object.Destroy(baseHitbox);
-            Main.CheatConsole.Log($"Adding outlines to {_activeHitboxes.Count} hitboxes");
             ResetTimer();
         }
 
@@ -124,12 +165,11 @@ namespace BlasII.CheatConsole
             }
 
             _activeHitboxes.Clear();
-
         }
 
         private void ResetTimer()
         {
-
+            _currentDelay = 0;
         }
 
         private bool HasComponentInParent<T>(GameObject obj)

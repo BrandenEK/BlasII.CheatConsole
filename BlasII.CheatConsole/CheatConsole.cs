@@ -161,8 +161,6 @@ namespace BlasII.CheatConsole
                 .SetColor(new Color(0.15f, 0.15f, 0.15f, 0.9f))
                 .rectTransform;
 
-            TMP_FontAsset font = TMP_FontAsset.CreateFontAsset(Resources.GetBuiltinResource<Font>("Arial.ttf"));
-
             // Create console text
             consoleText = UIModder.CreateRect("Text", consoleObject)
                 .SetPosition(10, 0)
@@ -170,7 +168,7 @@ namespace BlasII.CheatConsole
                 .AddText()
                 .SetFontSize(28)
                 .SetAlignment(TextAlignmentOptions.Left)
-                .SetFont(font);
+                .SetFont(UIModder.Fonts.Arial);
 
             consoleObject.gameObject.SetActive(false);
             return consoleObject.gameObject;

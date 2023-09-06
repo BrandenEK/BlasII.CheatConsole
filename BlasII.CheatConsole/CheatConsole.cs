@@ -32,6 +32,16 @@ namespace BlasII.CheatConsole
         protected override void OnInitialize()
         {
             RegisterCommand(new BeadCommand());
+            RegisterCommand(new FigureCommand());
+            RegisterCommand(new QuestItemCommand());
+            RegisterCommand(new PrayerCommand());
+
+            RegisterCommand(new AbilityCommand());
+
+            RegisterCommand(new WeaponCommand());
+
+            RegisterCommand(new HealthCommand());
+
             RegisterCommand(new LoadCommand());
         }
 
@@ -119,9 +129,10 @@ namespace BlasII.CheatConsole
             string[] parts = command.Trim().ToLower().Split(' ');
 
             if (parts.Length < 1)
-                parts = new string[] { string.Empty };
-            else if (parts.Length < 2)
-                parts = new string[] { parts[0], string.Empty };
+            {
+                LogError($"[CONSOLE] No command was entered!");
+                return;
+            }
 
             if (!_commands.ContainsKey(parts[0]))
             {
@@ -129,7 +140,13 @@ namespace BlasII.CheatConsole
                 return;
             }
 
-            _commands[parts[0]].Execute(parts[1], parts[2..]);
+            if (parts.Length < 2)
+            {
+                LogError($"[CONSOLE] Every command needs at least one parameter!");
+                return;
+            }
+
+            _commands[parts[0]].Execute(parts[1..]);
         }
 
         private GameObject GetConsoleObject()

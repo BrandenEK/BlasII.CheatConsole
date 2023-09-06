@@ -1,3 +1,4 @@
+
 name: Build
 
 on:
@@ -5,14 +6,15 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
     
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
     - name: Setup
       uses: actions/setup-dotnet@v3
       with:
@@ -24,21 +26,19 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
       
-    - name: Extract Module Name and Version
-      id: extract_info
+    - name: Export
       run: |
-        CS_PROJ_PATH=$(find . -type f -name "*.csproj")
-        MOD_NAME=$(grep -oP '<TargetName>\K[^<]+' "$CS_PROJ_PATH")
-        MOD_VERSION=$(grep -oP '<Version>\K[^<]+' "$CS_PROJ_PATH")
+        MOD_NAME=$(grep -oP '<TargetName>\K[^<]+' ${{ github.event.repository.name }}/${{ github.event.repository.name }}.csproj)
         echo "MOD_NAME=$MOD_NAME" >> $GITHUB_ENV
+        MOD_VERSION=$(grep -oP '<Version>\K[^<]+' ${{ github.event.repository.name }}/${{ github.event.repository.name }}.csproj)
         echo "MOD_VERSION=$MOD_VERSION" >> $GITHUB_ENV
         BUILD_DATE=$(date +'%Y-%m-%d')
         echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-        
+      
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.MOD_NAME }} v${{ env.MOD_VERSION }} ${{ env.BUILD_DATE }}
+        name: ${{ env.MOD_NAME }} v${{ env.MOD_VERSION }} (${{ env.BUILD_DATE }})
         path: publish/${{ env.MOD_NAME }}/
         retention-days: 30
         if-no-files-found: error

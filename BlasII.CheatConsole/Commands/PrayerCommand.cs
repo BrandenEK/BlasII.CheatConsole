@@ -2,9 +2,9 @@
 
 namespace BlasII.CheatConsole.Commands
 {
-    internal class BeadCommand : BaseCommand
+    internal class PrayerCommand : BaseCommand
     {
-        public BeadCommand() : base("bead") { }
+        public PrayerCommand() : base("prayer") { }
 
         public override void Execute(string[] args)
         {
@@ -15,7 +15,7 @@ namespace BlasII.CheatConsole.Commands
                         if (!ValidateParameterCount(args, 2))
                             return;
 
-                        AddBead(args[1]);
+                        AddPrayer(args[1]);
                         break;
                     }
                 case "remove":
@@ -23,7 +23,7 @@ namespace BlasII.CheatConsole.Commands
                         if (!ValidateParameterCount(args, 2))
                             return;
 
-                        RemoveBead(args[1]);
+                        RemovePrayer(args[1]);
                         break;
                     }
                 default:
@@ -34,50 +34,50 @@ namespace BlasII.CheatConsole.Commands
             }
         }
 
-        private void AddBead(string id)
+        private void AddPrayer(string id)
         {
-            // Add all beads
+            // Add all prayers
             if (id == "all")
             {
-                Write("Adding all beads!");
-                foreach (var item in ItemStorage.GetAllRosaryBeads())
+                Write("Adding all prayers!");
+                foreach (var item in ItemStorage.GetAllPrayers())
                     ItemStorage.PlayerInventory.AddItemAsync(item.Value);
                 return;
             }
 
-            // Check if the single bead exists
-            if (!ItemStorage.TryGetRosaryBead(id.ToUpper(), out var bead))
+            // Check if the single prayer exists
+            if (!ItemStorage.TryGetPrayer(id.ToUpper(), out var prayer))
             {
-                WriteFailure($"Bead {id} does not exist!");
+                WriteFailure($"Prayer {id} does not exist!");
                 return;
             }
 
-            // Add the single bead
-            Write("Adding bead: " + id);
-            ItemStorage.PlayerInventory.AddItemAsync(bead);
+            // Add the single prayer
+            Write("Adding prayer: " + id);
+            ItemStorage.PlayerInventory.AddItemAsync(prayer);
         }
 
-        private void RemoveBead(string id)
+        private void RemovePrayer(string id)
         {
-            // Remove all beads
+            // Remove all prayers
             if (id == "all")
             {
-                Write("Removing all beads!");
-                foreach (var item in ItemStorage.GetAllRosaryBeads())
+                Write("Removing all prayers!");
+                foreach (var item in ItemStorage.GetAllPrayers())
                     ItemStorage.PlayerInventory.RemoveItem(item.Value);
                 return;
             }
 
-            // Check if the single bead exists
-            if (!ItemStorage.TryGetRosaryBead(id.ToUpper(), out var bead))
+            // Check if the single prayer exists
+            if (!ItemStorage.TryGetPrayer(id.ToUpper(), out var prayer))
             {
-                WriteFailure($"Bead {id} does not exist!");
+                WriteFailure($"Prayer {id} does not exist!");
                 return;
             }
 
-            // Remove the single bead
-            Write("Removing bead: " + id);
-            ItemStorage.PlayerInventory.RemoveItem(bead);
+            // Remove the single prayer
+            Write("Removing prayer: " + id);
+            ItemStorage.PlayerInventory.RemoveItem(prayer);
         }
     }
 }

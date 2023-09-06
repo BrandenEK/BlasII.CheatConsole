@@ -32,6 +32,10 @@ namespace BlasII.CheatConsole
         protected override void OnInitialize()
         {
             RegisterCommand(new BeadCommand());
+            RegisterCommand(new FigureCommand());
+            RegisterCommand(new QuestItemCommand());
+            RegisterCommand(new PrayerCommand());
+
             RegisterCommand(new LoadCommand());
         }
 

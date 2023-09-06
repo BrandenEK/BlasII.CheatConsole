@@ -36,6 +36,8 @@ namespace BlasII.CheatConsole
             RegisterCommand(new QuestItemCommand());
             RegisterCommand(new PrayerCommand());
 
+            RegisterCommand(new AbilityCommand());
+
             RegisterCommand(new LoadCommand());
         }
 

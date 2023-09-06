@@ -26,6 +26,14 @@ namespace BlasII.CheatConsole.Commands
                         RemoveQuestItem(args[1]);
                         break;
                     }
+                case "list":
+                    {
+                        if (!ValidateParameterCount(args, 1))
+                            return;
+
+                        ListQuestItems();
+                        break;
+                    }
                 default:
                     {
                         WriteFailure("Unknown subcommand: " + args[0]);
@@ -78,6 +86,14 @@ namespace BlasII.CheatConsole.Commands
             // Remove the single quest item
             Write("Removing quest item: " + id);
             ItemStorage.PlayerInventory.RemoveItem(questitem);
+        }
+
+        private void ListQuestItems()
+        {
+            foreach (var questitem in ItemStorage.GetAllQuestItems())
+            {
+                Write($"{questitem.Key}: {questitem.Value.caption}");
+            }
         }
     }
 }

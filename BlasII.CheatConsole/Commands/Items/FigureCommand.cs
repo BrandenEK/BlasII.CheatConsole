@@ -26,6 +26,14 @@ namespace BlasII.CheatConsole.Commands
                         RemoveFigure(args[1]);
                         break;
                     }
+                case "list":
+                    {
+                        if (!ValidateParameterCount(args, 1))
+                            return;
+
+                        ListFigures();
+                        break;
+                    }
                 default:
                     {
                         WriteFailure("Unknown subcommand: " + args[0]);
@@ -78,6 +86,14 @@ namespace BlasII.CheatConsole.Commands
             // Remove the single figure
             Write("Removing figure: " + id);
             ItemStorage.PlayerInventory.RemoveItem(figure);
+        }
+
+        private void ListFigures()
+        {
+            foreach (var figure in ItemStorage.GetAllFigures())
+            {
+                Write($"{figure.Key}: {figure.Value.caption}");
+            }
         }
     }
 }

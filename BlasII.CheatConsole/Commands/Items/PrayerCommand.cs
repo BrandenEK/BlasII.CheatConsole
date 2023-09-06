@@ -26,6 +26,14 @@ namespace BlasII.CheatConsole.Commands
                         RemovePrayer(args[1]);
                         break;
                     }
+                case "list":
+                    {
+                        if (!ValidateParameterCount(args, 1))
+                            return;
+
+                        ListPrayers();
+                        break;
+                    }
                 default:
                     {
                         WriteFailure("Unknown subcommand: " + args[0]);
@@ -78,6 +86,14 @@ namespace BlasII.CheatConsole.Commands
             // Remove the single prayer
             Write("Removing prayer: " + id);
             ItemStorage.PlayerInventory.RemoveItem(prayer);
+        }
+
+        private void ListPrayers()
+        {
+            foreach (var prayer in ItemStorage.GetAllPrayers())
+            {
+                Write($"{prayer.Key}: {prayer.Value.caption}");
+            }
         }
     }
 }

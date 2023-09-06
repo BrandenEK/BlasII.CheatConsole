@@ -26,6 +26,14 @@ namespace BlasII.CheatConsole.Commands
                         RemoveBead(args[1]);
                         break;
                     }
+                case "list":
+                    {
+                        if (!ValidateParameterCount(args, 1))
+                            return;
+
+                        ListBeads();
+                        break;
+                    }
                 default:
                     {
                         WriteFailure("Unknown subcommand: " + args[0]);
@@ -78,6 +86,14 @@ namespace BlasII.CheatConsole.Commands
             // Remove the single bead
             Write("Removing bead: " + id);
             ItemStorage.PlayerInventory.RemoveItem(bead);
+        }
+
+        private void ListBeads()
+        {
+            foreach (var bead in ItemStorage.GetAllRosaryBeads())
+            {
+                Write($"{bead.Key}: {bead.Value.caption}");
+            }
         }
     }
 }

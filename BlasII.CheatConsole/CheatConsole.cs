@@ -40,6 +40,8 @@ namespace BlasII.CheatConsole
 
             RegisterCommand(new WeaponCommand());
 
+            RegisterCommand(new HealthCommand());
+
             RegisterCommand(new LoadCommand());
         }
 

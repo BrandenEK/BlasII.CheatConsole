@@ -132,17 +132,17 @@ namespace BlasII.CheatConsole
             {
                 LogError($"[CONSOLE] No command was entered!");
                 return;
-            }    
-
-            if (parts.Length < 2)
-            {
-                LogError($"[CONSOLE] Every command needs at least one parameter!");
-                return;
             }
 
             if (!_commands.ContainsKey(parts[0]))
             {
                 LogError($"[CONSOLE] Command '{parts[0]}' is not a valid command!");
+                return;
+            }
+
+            if (parts.Length < 2)
+            {
+                LogError($"[CONSOLE] Every command needs at least one parameter!");
                 return;
             }
 

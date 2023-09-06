@@ -61,17 +61,17 @@ namespace BlasII.CheatConsole.Commands
                 return;
             }
 
-            // Add the single ability
+            // Unlock the single ability
             Write("Adding ability: " + id);
             CoreCache.AbilitiesUnlockManager.SetAbility(ability, true);
         }
 
         private void LockAbility(string id)
         {
-            // Remove all abilities
+            // Lock all abilities
             if (id == "all")
             {
-                Write("Removing all abilities!");
+                Write("Locking all abilities!");
                 foreach (var ab in AbilityStorage.GetAllAbilities())
                     CoreCache.AbilitiesUnlockManager.SetAbility(ab.Value, false);
                 return;
@@ -84,8 +84,8 @@ namespace BlasII.CheatConsole.Commands
                 return;
             }
 
-            // Remove the single ability
-            Write("Removing ability: " + id);
+            // Lock the single ability
+            Write("Locking ability: " + id);
             CoreCache.AbilitiesUnlockManager.SetAbility(ability, false);
         }
 

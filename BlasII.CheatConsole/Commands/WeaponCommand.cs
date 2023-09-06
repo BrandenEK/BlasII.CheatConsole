@@ -45,10 +45,10 @@ namespace BlasII.CheatConsole.Commands
 
         private void UnlockWeapon(string id)
         {
-            // Add all weapons
+            // Unlock all weapons
             if (id == "all")
             {
-                Write("Adding all weapons!");
+                Write("Unlocking all weapons!");
                 foreach (var w in WeaponStorage.GetAllWeapons())
                     CoreCache.EquipmentManager.Unlock(w.Value);
                 return;
@@ -61,17 +61,17 @@ namespace BlasII.CheatConsole.Commands
                 return;
             }
 
-            // Add the single weapon
-            Write("Adding weapon: " + id);
+            // Unlock the single weapon
+            Write("Unlocking weapon: " + id);
             CoreCache.EquipmentManager.Unlock(weapon);
         }
 
         private void LockWeapon(string id)
         {
-            // Remove all weapons
+            // Lock all weapons
             if (id == "all")
             {
-                Write("Removing all weapons!");
+                Write("Locking all weapons!");
                 foreach (var w in WeaponStorage.GetAllWeapons())
                     CoreCache.EquipmentManager.Lock(w.Value);
                 return;
@@ -84,8 +84,8 @@ namespace BlasII.CheatConsole.Commands
                 return;
             }
 
-            // Remove the single weapon
-            Write("Removing weapon: " + id);
+            // Lock the single weapon
+            Write("Locking weapon: " + id);
             CoreCache.EquipmentManager.Lock(weapon);
         }
 

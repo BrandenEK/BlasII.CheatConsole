@@ -1,6 +1,4 @@
 ﻿using BlasII.ModdingAPI.Storage;
-using System;
-using System.Collections.Generic;
 
 namespace BlasII.CheatConsole.Commands
 {
@@ -8,47 +6,52 @@ namespace BlasII.CheatConsole.Commands
     {
         public BeadCommand() : base("bead") { }
 
-        private void AddBead(string[] parameters)
+        public override void Execute(string[] args)
         {
-            if (!ValidateParameterCount("add", parameters, 1))
-                return;
-
-            string beadId = parameters[0].ToUpper();
-
-            if (!ItemStorage.TryGetRosaryBead(beadId, out var bead))
+            switch (args[0])
             {
-                Write($"Bead {beadId} does not exist!");
+                case "add":
+                    {
+                        if (ValidateParameterCount(args, 2))
+                            AddBead(args[1].ToUpper());
+                        break;
+                    }
+                case "remove":
+                    {
+                        if (ValidateParameterCount(args, 2))
+                            RemoveBead(args[1].ToUpper());
+                        break;
+                    }
+                default:
+                    {
+                        WriteFailure("Unknown subcommand: " + args[0]);
+                        break;
+                    }
+            }
+        }
+
+        private void AddBead(string id)
+        {
+            if (!ItemStorage.TryGetRosaryBead(id, out var bead))
+            {
+                WriteFailure($"Bead {id} does not exist!");
                 return;
             }
 
-            Write("Adding bead: " + beadId);
+            Write("Adding bead: " + id);
             ItemStorage.PlayerInventory.AddItemAsync(bead);
         }
 
-        private void RemoveBead(string[] parameters)
+        private void RemoveBead(string id)
         {
-            if (!ValidateParameterCount("remove", parameters, 1))
-                return;
-
-            string beadId = parameters[0].ToUpper();
-
-            if (!ItemStorage.TryGetRosaryBead(beadId, out var bead))
+            if (!ItemStorage.TryGetRosaryBead(id, out var bead))
             {
-                Write($"Bead {beadId} does not exist!");
+                WriteFailure($"Bead {id} does not exist!");
                 return;
             }
 
-            Write("Removing bead: " + beadId);
+            Write("Removing bead: " + id);
             ItemStorage.PlayerInventory.RemoveItem(bead);
-        }
-
-        protected override Dictionary<string, Action<string[]>> RegisterSubcommands()
-        {
-            return new Dictionary<string, Action<string[]>>()
-            {
-                { "add", AddBead },
-                { "remove", RemoveBead },
-            };
         }
     }
 }

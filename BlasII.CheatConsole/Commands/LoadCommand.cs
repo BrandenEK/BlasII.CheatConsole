@@ -1,7 +1,5 @@
 ﻿using Il2CppTGK.Game;
 using Il2CppTGK.Game.PlayerSpawn;
-using System;
-using System.Collections.Generic;
 
 namespace BlasII.CheatConsole.Commands
 {
@@ -9,28 +7,29 @@ namespace BlasII.CheatConsole.Commands
     {
         public LoadCommand() : base("load") { }
 
-        private void LoadRoom(string[] paramaters)
+        public override void Execute(string[] args)
         {
-            string room;
             int entry;
-
-            if (paramaters.Length == 2)
+            if (args.Length == 1)
             {
-                room = paramaters[0];
-                if (!ValidateIntParamater(paramaters[1], out entry))
-                    return;
-            }
-            else if (paramaters.Length == 1)
-            {
-                room = paramaters[0];
                 entry = 0;
+            }
+            else if (args.Length == 2)
+            {
+                if (!ValidateIntParamater(args[1], out entry))
+                    return;
             }
             else
             {
-                ValidateParameterCount("room", paramaters, 2);
+                ValidateParameterCount(args, 2);
                 return;
             }
 
+            LoadRoom(args[0], entry);
+        }
+
+        private void LoadRoom(string room, int entry)
+        {
             var location = new SceneEntryID()
             {
                 scene = room.ToUpper(),
@@ -39,14 +38,6 @@ namespace BlasII.CheatConsole.Commands
 
             Write("Teleporting to " +  location.scene);
             CoreCache.PlayerSpawn.TeleportPlayer(location, false, null);
-        }
-
-        protected override Dictionary<string, Action<string[]>> RegisterSubcommands()
-        {
-            return new Dictionary<string, Action<string[]>>()
-            {
-                { "room", LoadRoom },
-            };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlasII.ModdingAPI.Storage;
+using System;
 using System.Collections.Generic;
 
 namespace BlasII.CheatConsole.Commands
@@ -12,7 +13,16 @@ namespace BlasII.CheatConsole.Commands
             if (!ValidateParameterCount("add", parameters, 1))
                 return;
 
-            Write("Adding bead: " + parameters[0]);
+            string beadId = parameters[0].ToUpper();
+
+            if (!ItemStorage.TryGetRosaryBead(beadId, out var bead))
+            {
+                Write($"Bead {beadId} does not exist!");
+                return;
+            }
+
+            Write("Adding bead: " + beadId);
+            ItemStorage.PlayerInventory.AddItemAsync(bead);
         }
 
         private void RemoveBead(string[] parameters)
@@ -20,7 +30,16 @@ namespace BlasII.CheatConsole.Commands
             if (!ValidateParameterCount("remove", parameters, 1))
                 return;
 
-            Write("Removing bead: " + parameters[0]);
+            string beadId = parameters[0].ToUpper();
+
+            if (!ItemStorage.TryGetRosaryBead(beadId, out var bead))
+            {
+                Write($"Bead {beadId} does not exist!");
+                return;
+            }
+
+            Write("Removing bead: " + beadId);
+            ItemStorage.PlayerInventory.RemoveItem(bead);
         }
 
         protected override Dictionary<string, Action<string[]>> RegisterSubcommands()

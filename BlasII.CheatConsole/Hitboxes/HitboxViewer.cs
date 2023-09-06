@@ -102,7 +102,7 @@ namespace BlasII.CheatConsole.Hitboxes
 
                 // Make sure the collider is a valid type
                 string colliderType = collider.GetIl2CppType().Name;
-                if (colliderType != "BoxCollider2D" && colliderType != "CircleCollider2D" && colliderType != "PolygonCollider2D")
+                if (colliderType != "BoxCollider2D" && colliderType != "CircleCollider2D" && colliderType != "CapsuleCollider2D" && colliderType != "PolygonCollider2D")
                 {
                     continue;
                 }
@@ -133,6 +133,9 @@ namespace BlasII.CheatConsole.Hitboxes
                             break;
                         case "CircleCollider2D":
                             SetupCircle(line, collider.Cast<CircleCollider2D>());
+                            break;
+                        case "CapsuleCollider2D":
+                            SetupCapsule(line, collider.Cast<CapsuleCollider2D>());
                             break;
                         case "PolygonCollider2D":
                             SetupPolygon(line, collider.Cast<PolygonCollider2D>());
@@ -194,13 +197,13 @@ namespace BlasII.CheatConsole.Hitboxes
             if (collider.radius >= 5 || collider.radius <= 0.1f)
                 return;
 
-            int steps = 100;
+            int segments = 80;
             float radius = collider.radius;
 
-            renderer.positionCount = steps;
-            for (int currentStep = 0; currentStep < steps; currentStep++)
+            renderer.positionCount = segments;
+            for (int currentStep = 0; currentStep < segments; currentStep++)
             {
-                float circumferenceProgress = (float)currentStep / (steps - 1);
+                float circumferenceProgress = (float)currentStep / (segments - 1);
 
                 float currentRadian = circumferenceProgress * 2 * Mathf.PI;
 
@@ -209,6 +212,24 @@ namespace BlasII.CheatConsole.Hitboxes
 
                 var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
                 renderer.SetPosition(currentStep, collider.offset + currentPosition);
+            }
+        }
+
+        private void SetupCapsule(LineRenderer renderer, CapsuleCollider2D collider)
+        {
+            int segments = 80;
+            float xRadius = collider.size.x / 2;
+            float yRadius = collider.size.y / 2;
+            float currAngle = 20f;
+
+            renderer.positionCount = segments + 1;
+            for (int i = 0; i < (segments + 1); i++)
+            {
+                float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
+                float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
+
+                renderer.SetPosition(i, collider.offset + new Vector2(x, y));
+                currAngle += (360f / segments);
             }
         }
 

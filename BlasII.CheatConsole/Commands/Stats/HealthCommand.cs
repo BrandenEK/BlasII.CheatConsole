@@ -1,4 +1,6 @@
-﻿
+﻿using BlasII.ModdingAPI.Storage;
+using Il2CppTGK.Game.Components.StatsSystem.Data;
+
 namespace BlasII.CheatConsole.Commands
 {
     internal class HealthCommand : BaseCommand
@@ -51,7 +53,11 @@ namespace BlasII.CheatConsole.Commands
 
         private void FillHealth()
         {
-
+            if (StatStorage.TryGetRangeStat("Health", out RangeStatID health))
+            {
+                Write("Filling health");
+                StatStorage.PlayerStats.SetCurrentToMax(health);
+            }
         }
 
         private void CurrentHealth()

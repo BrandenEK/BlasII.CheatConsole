@@ -27,6 +27,14 @@ namespace BlasII.CheatConsole.Commands
                         LockWeapon(args[1]);
                         break;
                     }
+                case "upgrade":
+                    {
+                        if (!ValidateParameterCount(args, 2))
+                            return;
+
+                        UpgradeWeapon(args[1]);
+                        break;
+                    }
                 case "list":
                     {
                         if (!ValidateParameterCount(args, 1))
@@ -87,6 +95,20 @@ namespace BlasII.CheatConsole.Commands
             // Lock the single weapon
             Write("Locking weapon: " + id);
             CoreCache.EquipmentManager.Lock(weapon);
+        }
+
+        private void UpgradeWeapon(string id)
+        {
+            // Check if the weapon exists
+            if (!WeaponStorage.TryGetWeapon(id.ToUpper(), out var weapon))
+            {
+                WriteFailure($"Weapon {id} does not exist!");
+                return;
+            }
+
+            // Upgrade the weapon
+            Write("Upgrading weapon: " + id);
+            CoreCache.WeaponMemoryManager.UpgradeWeaponTier(weapon);
         }
 
         private void ListWeapons()

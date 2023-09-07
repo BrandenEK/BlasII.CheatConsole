@@ -80,5 +80,10 @@ To run commands, press backslash to open the console
 
 ---
 
+### Prie Dieus
+```priedieu upgrade``` - Upgrades all prie dieus to the maximum
+
+---
+
 ### Loading
 ```load {scene} [entryId]``` - Loads the specified room at the optional entry id

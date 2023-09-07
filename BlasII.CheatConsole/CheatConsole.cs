@@ -45,6 +45,8 @@ namespace BlasII.CheatConsole
             RegisterCommand(new TearsCommand());
             RegisterCommand(new MarksCommand());
 
+            RegisterCommand(new PrieDieuCommand());
+
             RegisterCommand(new LoadCommand());
         }
 

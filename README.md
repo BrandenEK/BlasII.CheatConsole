@@ -85,5 +85,10 @@ To run commands, press backslash to open the console
 
 ---
 
+### God Mode
+```godmode {on/off}``` - Enables unlimited health and fervour
+
+---
+
 ### Loading
 ```load {scene} [entryId]``` - Loads the specified room at the optional entry id

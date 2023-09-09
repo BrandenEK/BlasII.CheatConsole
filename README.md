@@ -83,6 +83,11 @@ To run commands, press backslash to open the console
 
 ---
 
+### Guilt
+```guilt reset``` - Resets guilt to 0
+
+---
+
 ### Abilities
 ```ability unlock {id}``` - Unlocks the specified ability
 

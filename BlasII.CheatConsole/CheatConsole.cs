@@ -45,6 +45,7 @@ namespace BlasII.CheatConsole
             RegisterCommand(new FlaskCommand());
             RegisterCommand(new TearsCommand());
             RegisterCommand(new MarksCommand());
+            RegisterCommand(new GuiltCommand());
 
             RegisterCommand(new PrieDieuCommand());
 

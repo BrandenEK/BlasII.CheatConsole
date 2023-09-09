@@ -41,12 +41,35 @@ To run commands, press backslash to open the console
 ---
 
 ### Health
+```health current``` - Displays the current health
+
+```health set {amount}``` - Sets the current health to the specified amount
+
 ```health fill``` - Sets the current health to max
+
+```health upgrade``` - Upgrades the maximum health
 
 ---
 
 ### Fervour
+```fervour current``` - Displays the current fervour
+
+```fervour set {amount}``` - Sets the current fervour to the specified amount
+
 ```fervour fill``` - Sets the current fervour to max
+
+```fervour upgrade``` - Upgrades the maximum fervour
+
+---
+
+### Flask
+```flask current``` - Displays the current flask
+
+```flask set {amount}``` - Sets the current flask to the specified amount
+
+```flask fill``` - Sets the current flask to max
+
+```flask upgrade``` - Upgrades the maximum flask
 
 ---
 
@@ -57,6 +80,11 @@ To run commands, press backslash to open the console
 
 ### Marks
 ```marks add {amount}``` - Adds the specified amount of marks
+
+---
+
+### Guilt
+```guilt reset``` - Resets guilt to 0
 
 ---
 
@@ -82,6 +110,11 @@ To run commands, press backslash to open the console
 
 ### Prie Dieus
 ```priedieu upgrade``` - Upgrades all prie dieus to the maximum
+
+---
+
+### God Mode
+```godmode {on/off}``` - Enables unlimited health and fervour
 
 ---
 

@@ -42,11 +42,14 @@ namespace BlasII.CheatConsole
 
             RegisterCommand(new HealthCommand());
             RegisterCommand(new FervourCommand());
+            RegisterCommand(new FlaskCommand());
             RegisterCommand(new TearsCommand());
             RegisterCommand(new MarksCommand());
+            RegisterCommand(new GuiltCommand());
 
             RegisterCommand(new PrieDieuCommand());
 
+            RegisterCommand(new GodmodeCommand());
             RegisterCommand(new LoadCommand());
         }
 
@@ -75,6 +78,11 @@ namespace BlasII.CheatConsole
                     OnEnable();
                 else
                     OnDisable();
+            }
+
+            foreach (var cmd in _commands.Values)
+            {
+                cmd.Update();
             }
         }
 

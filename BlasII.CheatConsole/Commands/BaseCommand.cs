@@ -10,6 +10,8 @@ namespace BlasII.CheatConsole.Commands
 
         public abstract void Execute(string[] args);
 
+        public virtual void Update() { }
+
         protected bool ValidateParameterCount(string[] paramaters, int num)
         {
             bool isValid = paramaters.Length == num;

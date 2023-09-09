@@ -47,6 +47,7 @@ namespace BlasII.CheatConsole
 
             RegisterCommand(new PrieDieuCommand());
 
+            RegisterCommand(new GodmodeCommand());
             RegisterCommand(new LoadCommand());
         }
 
@@ -75,6 +76,11 @@ namespace BlasII.CheatConsole
                     OnEnable();
                 else
                     OnDisable();
+            }
+
+            foreach (var cmd in _commands.Values)
+            {
+                cmd.Update();
             }
         }
 

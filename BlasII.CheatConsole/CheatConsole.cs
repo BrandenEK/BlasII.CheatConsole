@@ -42,6 +42,7 @@ namespace BlasII.CheatConsole
 
             RegisterCommand(new HealthCommand());
             RegisterCommand(new FervourCommand());
+            RegisterCommand(new FlaskCommand());
             RegisterCommand(new TearsCommand());
             RegisterCommand(new MarksCommand());
 

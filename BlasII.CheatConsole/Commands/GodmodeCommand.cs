@@ -26,7 +26,7 @@ namespace BlasII.CheatConsole.Commands
 
         public override void Update()
         {
-            if (_active)
+            if (_active && Main.CheatConsole.LoadStatus.GameSceneLoaded)
             {
                 if (StatStorage.TryGetRangeStat("Health", out var health))
                 {

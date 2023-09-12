@@ -48,6 +48,7 @@ namespace BlasII.CheatConsole
             RegisterCommand(new GuiltCommand());
 
             RegisterCommand(new PrieDieuCommand());
+            RegisterCommand(new QuestCommand());
 
             RegisterCommand(new GodmodeCommand());
             RegisterCommand(new LoadCommand());

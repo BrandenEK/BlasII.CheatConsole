@@ -140,13 +140,14 @@ namespace BlasII.CheatConsole
         private void ProcessCommand(string command)
         {
             LogCustom("[CONSOLE] " + command, System.Drawing.Color.White);
-            string[] parts = command.Trim().ToLower().Split(' ');
+            string[] parts = command.Trim().Split(' ');
 
             if (parts.Length < 1)
             {
                 LogError($"[CONSOLE] No command was entered!");
                 return;
             }
+            parts[0] = parts[0].ToLower();
 
             if (!_commands.ContainsKey(parts[0]))
             {

@@ -1,4 +1,4 @@
-# BlasII.CheatConsole
+# Blasphemous 2 Cheat Console
 
 To run commands, press backslash to open the console
 
@@ -110,6 +110,11 @@ To run commands, press backslash to open the console
 
 ### Prie Dieus
 ```priedieu upgrade``` - Upgrades all prie dieus to the maximum
+
+---
+
+### Quests
+```quest {questId} {varId} {value}``` - Sets the quest variable to the specified value
 
 ---
 

@@ -31,6 +31,11 @@ namespace BlasII.CheatConsole
 
         protected override void OnInitialize()
         {
+            InputHandler.RegisterDefaultKeybindings(new Dictionary<string, KeyCode>()
+            {
+                { "ToggleConsole", KeyCode.Backslash }
+            });
+
             RegisterCommand(new BeadCommand());
             RegisterCommand(new FigureCommand());
             RegisterCommand(new QuestItemCommand());
@@ -70,7 +75,9 @@ namespace BlasII.CheatConsole
                 ProcessKeyInput();
             }
 
-            if (Input.GetKeyDown(KeyCode.Backslash) && (!CoreCache.Input.InputBlocked && CoreCache.Room.CurrentRoom != null || _enabled))
+            bool canToggle = (!InputHandler.InputBlocked && LoadStatus.GameSceneLoaded) || _enabled;
+
+            if (InputHandler.GetKeyDown("ToggleConsole") && canToggle)
             {
                 _enabled = !_enabled;
                 GetConsoleObject().gameObject.SetActive(_enabled);
@@ -89,13 +96,13 @@ namespace BlasII.CheatConsole
 
         private void OnEnable()
         {
-            CoreCache.Input.SetInputBlock(true, false);
+            InputHandler.InputBlocked = true;
             ResetConsole();
         }
 
         private void OnDisable()
         {
-            CoreCache.Input.ClearAllInputBlocks();
+            InputHandler.InputBlocked = false;
         }
 
         private void ProcessKeyInput()

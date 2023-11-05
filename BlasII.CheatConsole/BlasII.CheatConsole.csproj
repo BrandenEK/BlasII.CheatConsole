@@ -2,18 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+
+    <Title>Cheat Console</Title>
+    <Product>Cheat Console</Product>
+    <Authors>Damocles</Authors>
+    <Company>Damocles</Company>
+    <Description>Adds a console with various debug commands</Description>
+    <Version>1.0.1</Version>
 
     <TargetName>CheatConsole</TargetName>
-    <Product>Cheat Console</Product>
-    <Company>Damocles</Company>
-    <Version>1.0.1</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/BrandenEK/BlasII.CheatConsole</RepositoryUrl>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BlasII.ModdingAPI" Version="0.3.4" />
-    <PackageReference Include="BlasII.ModdingReferences" Version="1.1.0.1" />
+    <PackageReference Include="BlasII.ModdingAPI" Version="0.5.0" />
+    <PackageReference Include="BlasII.ModdingReferences" Version="1.1.0.2" />
     <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5" />
     <PackageReference Include="LavaGang.MelonLoader" Version="0.6.1" />
     <PackageReference Include="Lib.Harmony" Version="2.2.2" />

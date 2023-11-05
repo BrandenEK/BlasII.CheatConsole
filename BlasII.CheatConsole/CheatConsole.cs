@@ -75,10 +75,9 @@ namespace BlasII.CheatConsole
                 ProcessKeyInput();
             }
 
-            bool consoleInput = InputHandler.GetKeyDown("ToggleConsole");
-            bool canToggle = !CoreCache.Input.InputBlocked && LoadStatus.GameSceneLoaded;
+            bool canToggle = (!InputHandler.InputBlocked && LoadStatus.GameSceneLoaded) || _enabled;
 
-            if (consoleInput && (canToggle || _enabled))
+            if (InputHandler.GetKeyDown("ToggleConsole") && canToggle)
             {
                 _enabled = !_enabled;
                 GetConsoleObject().gameObject.SetActive(_enabled);
@@ -97,13 +96,13 @@ namespace BlasII.CheatConsole
 
         private void OnEnable()
         {
-            CoreCache.Input.SetInputBlock(true, false);
+            InputHandler.InputBlocked = true;
             ResetConsole();
         }
 
         private void OnDisable()
         {
-            CoreCache.Input.ClearAllInputBlocks();
+            InputHandler.InputBlocked = false;
         }
 
         private void ProcessKeyInput()

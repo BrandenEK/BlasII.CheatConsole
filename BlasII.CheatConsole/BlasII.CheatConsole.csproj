@@ -8,7 +8,7 @@
     <Authors>Damocles</Authors>
     <Company>Damocles</Company>
     <Description>Adds a console with various debug commands</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
 
     <TargetName>CheatConsole</TargetName>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>

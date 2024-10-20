@@ -1,42 +1,40 @@
-﻿using BlasII.ModdingAPI.Storage;
-using Il2CppTGK.Game.Components.StatsSystem.Data;
+﻿using Il2CppTGK.Game.Components.StatsSystem.Data;
 
-namespace BlasII.CheatConsole.Commands
+namespace BlasII.CheatConsole.Commands.Stats;
+
+internal class MarksCommand : BaseCommand
 {
-    internal class MarksCommand : BaseCommand
+    public MarksCommand() : base("marks") { }
+
+    public override void Execute(string[] args)
     {
-        public MarksCommand() : base("marks") { }
-
-        public override void Execute(string[] args)
+        switch (args[0])
         {
-            switch (args[0])
-            {
-                case "add":
-                    {
-                        if (!ValidateParameterCount(args, 2))
-                            return;
+            case "add":
+                {
+                    if (!ValidateParameterCount(args, 2))
+                        return;
 
-                        if (!ValidateIntParamater(args[1], out int amount))
-                            return;
+                    if (!ValidateIntParamater(args[1], out int amount))
+                        return;
 
-                        AddMarks(amount);
-                        break;
-                    }
-                default:
-                    {
-                        WriteFailure("Unknown subcommand: " + args[0]);
-                        break;
-                    }
-            }
+                    AddMarks(amount);
+                    break;
+                }
+            default:
+                {
+                    WriteFailure("Unknown subcommand: " + args[0]);
+                    break;
+                }
         }
+    }
 
-        private void AddMarks(int amount)
+    private void AddMarks(int amount)
+    {
+        if (StatStorage.TryGetValueStat("Orbs", out ValueStatID orbs))
         {
-            if (StatStorage.TryGetValueStat("Orbs", out ValueStatID orbs))
-            {
-                Write($"Adding {amount} marks");
-                StatStorage.PlayerStats.AddToCurrentValue(orbs, amount);
-            }
+            Write($"Adding {amount} marks");
+            StatStorage.PlayerStats.AddToCurrentValue(orbs, amount);
         }
     }
 }

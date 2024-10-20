@@ -1,18 +1,16 @@
-﻿
-namespace BlasII.CheatConsole.Commands
+﻿namespace BlasII.CheatConsole.Commands.Stats;
+
+internal class HealthCommand : BaseStatCommand
 {
-    internal class HealthCommand : BaseStatCommand
-    {
-        public HealthCommand() : base("health") { }
-    }
+    public HealthCommand() : base("health") { }
+}
 
-    internal class FervourCommand : BaseStatCommand
-    {
-        public FervourCommand() : base("fervour") { }
-    }
+internal class FervourCommand : BaseStatCommand
+{
+    public FervourCommand() : base("fervour") { }
+}
 
-    internal class FlaskCommand : BaseStatCommand
-    {
-        public FlaskCommand() : base("flask") { }
-    }
+internal class FlaskCommand : BaseStatCommand
+{
+    public FlaskCommand() : base("flask") { }
 }

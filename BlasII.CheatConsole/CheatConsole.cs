@@ -190,22 +190,32 @@ public class CheatConsole : BlasIIMod
             return consoleObject.gameObject;
 
         // Create console background
-        consoleObject = UIModder.CreateRect("CheatConsole")
-            .SetXRange(Vector2.zero).SetYRange(Vector2.zero)
-            .SetSize(800, 50)
-            .SetPivot(Vector2.zero)
-            .AddImage()
-            .SetColor(new Color(0.15f, 0.15f, 0.15f, 0.9f))
-            .rectTransform;
+        consoleObject = UIModder.Create(new RectCreationOptions()
+        {
+            Name = "CheatConsole",
+            Pivot = Vector2.zero,
+            Position = Vector2.zero,
+            Size = new Vector2(800, 50),
+            XRange = Vector2.zero,
+            YRange = Vector2.zero,
+        }).AddImage(new ImageCreationOptions()
+        {
+            Color = new Color(0.15f, 0.15f, 0.15f, 0.9f)
+        }).rectTransform;
 
         // Create console text
-        consoleText = UIModder.CreateRect("Text", consoleObject)
-            .SetPosition(10, 0)
-            .SetSize(790, 50)
-            .AddText()
-            .SetFontSize(28)
-            .SetAlignment(TextAlignmentOptions.Left)
-            .SetFont(UIModder.Fonts.Arial);
+        consoleText = UIModder.Create(new RectCreationOptions()
+        {
+            Name = "Text",
+            Parent = consoleObject,
+            Position = new Vector2(10, 0),
+            Size = new Vector2(790, 50),
+        }).AddText(new TextCreationOptions()
+        {
+            Alignment = TextAlignmentOptions.Left,
+            Font = UIModder.Fonts.Arial,
+            FontSize = 28,
+        });
 
         consoleObject.gameObject.SetActive(false);
         return consoleObject.gameObject;

@@ -4,7 +4,7 @@ using Il2CppTGK.Inventory;
 
 namespace BlasII.CheatConsole.Commands.Items;
 
-internal class ItemCommand<T>(string name, TypedStorage<T> storage) : BaseCommand(name) where T : ItemID
+internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage) : BaseCommand(name) where T : ItemID
 {
     private readonly string _name = name;
     private readonly TypedStorage<T> _storage = storage;

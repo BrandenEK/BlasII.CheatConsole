@@ -6,10 +6,9 @@ namespace BlasII.CheatConsole.Commands.Items;
 
 internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage) : BaseCommand(name) where T : ItemID
 {
-    private readonly string _name = name;
     private readonly TypedStorage<T> _storage = storage;
 
-    public override void Execute(string[] args)
+    public override sealed void Execute(string[] args)
     {
         switch (args[0])
         {
@@ -50,7 +49,7 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
         // Add all items
         if (id == "all")
         {
-            Write($"Adding all {_name}s!");
+            Write($"Adding all {Name}s!");
             foreach (var asset in _storage.AllAssets)
                 AssetStorage.PlayerInventory.AddItemAsync(asset.Value);
             return;
@@ -59,12 +58,12 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
         // Check if the single item exists
         if (!_storage.TryGetAsset(id.ToUpper(), out var item))
         {
-            WriteFailure($"{_name.Capitalize()} {id} does not exist!");
+            WriteFailure($"{Name.Capitalize()} {id} does not exist!");
             return;
         }
 
         // Add the single item
-        Write($"Adding {_name}: " + id);
+        Write($"Adding {Name}: " + id);
         AssetStorage.PlayerInventory.AddItemAsync(item);
     }
 
@@ -73,7 +72,7 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
         // Remove all items
         if (id == "all")
         {
-            Write($"Removing all {_name}s!");
+            Write($"Removing all {Name}s!");
             foreach (var asset in _storage.AllAssets)
                 AssetStorage.PlayerInventory.RemoveItem(asset.Value);
             return;
@@ -82,12 +81,12 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
         // Check if the single item exists
         if (!_storage.TryGetAsset(id.ToUpper(), out var item))
         {
-            WriteFailure($"{_name.Capitalize()} {id} does not exist!");
+            WriteFailure($"{Name.Capitalize()} {id} does not exist!");
             return;
         }
 
         // Remove the single item
-        Write($"Removing {_name}: " + id);
+        Write($"Removing {Name}: " + id);
         AssetStorage.PlayerInventory.RemoveItem(item);
     }
 

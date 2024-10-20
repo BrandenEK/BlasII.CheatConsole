@@ -1,10 +1,10 @@
-﻿using Il2CppTGK.Game.Components.StatsSystem.Data;
+﻿using BlasII.ModdingAPI.Assets;
 
 namespace BlasII.CheatConsole.Commands.Stats;
 
-internal abstract class BaseStatCommand : BaseCommand
+internal abstract class BaseRangeStatCommand(string name, string statName) : BaseCommand(name)
 {
-    public BaseStatCommand(string name) : base(name) { }
+    private readonly string _statName = statName;
 
     public override sealed void Execute(string[] args)
     {
@@ -53,34 +53,43 @@ internal abstract class BaseStatCommand : BaseCommand
         }
     }
 
-    private RangeStatID GetStat()
-    {
-        string stat = char.ToUpper(Name[0]) + Name[1..];
-        return StatStorage.TryGetRangeStat(stat, out var value) ? value : null;
-    }
-
     private void Current()
     {
-        int amount = StatStorage.PlayerStats.GetCurrentValue(GetStat());
+        int amount = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats[_statName]);
         Write($"Current {Name} is {amount}");
     }
 
     private void Set(int amount)
     {
         Write($"Setting {Name} to {amount}");
-        StatStorage.PlayerStats.SetCurrentValue(GetStat(), amount);
+        AssetStorage.PlayerStats.SetCurrentValue(AssetStorage.RangeStats[_statName], amount);
     }
 
     private void Fill()
     {
         Write("Filling " + Name);
-        StatStorage.PlayerStats.SetCurrentToMax(GetStat());
+        AssetStorage.PlayerStats.SetCurrentToMax(AssetStorage.RangeStats[_statName]);
     }
 
     private void Upgrade()
     {
         Write("Upgrading " + Name);
-        StatStorage.PlayerStats.Upgrade(GetStat());
-        Fill();
+        AssetStorage.PlayerStats.Upgrade(AssetStorage.RangeStats[_statName]);
+        AssetStorage.PlayerStats.SetCurrentToMax(AssetStorage.RangeStats[_statName]);
     }
+}
+
+internal class HealthCommand : BaseRangeStatCommand
+{
+    public HealthCommand() : base("health", "Health") { }
+}
+
+internal class FervourCommand : BaseRangeStatCommand
+{
+    public FervourCommand() : base("fervour", "Fervour") { }
+}
+
+internal class FlaskCommand : BaseRangeStatCommand
+{
+    public FlaskCommand() : base("flask", "Flask") { }
 }

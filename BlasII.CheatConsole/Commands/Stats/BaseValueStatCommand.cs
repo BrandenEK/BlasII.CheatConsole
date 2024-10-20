@@ -4,10 +4,9 @@ namespace BlasII.CheatConsole.Commands.Stats;
 
 internal abstract class BaseValueStatCommand(string name, string statName) : BaseCommand(name)
 {
-    private readonly string _name = name;
     private readonly string _statName = statName;
 
-    public override void Execute(string[] args)
+    public override sealed void Execute(string[] args)
     {
         switch (args[0])
         {
@@ -34,7 +33,7 @@ internal abstract class BaseValueStatCommand(string name, string statName) : Bas
     {
         if (AssetStorage.ValueStats.TryGetAsset(_statName, out var stat))
         {
-            Write($"Adding {amount} {_name}");
+            Write($"Adding {amount} {Name}");
             AssetStorage.PlayerStats.AddToCurrentValue(stat, amount);
         }
     }

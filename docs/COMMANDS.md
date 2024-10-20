@@ -1,8 +1,4 @@
-# Blasphemous 2 Cheat Console
-
-To run commands, press backslash to open the console
-
----
+# Blasphemous 2 console commands
 
 ### Beads
 ```bead add {id}``` - Adds the specified bead to the inventory

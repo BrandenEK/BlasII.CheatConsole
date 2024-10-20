@@ -1,4 +1,6 @@
-﻿namespace BlasII.CheatConsole.Commands.Stats;
+﻿using BlasII.ModdingAPI.Assets;
+
+namespace BlasII.CheatConsole.Commands.Stats;
 
 internal class GuiltCommand : BaseCommand
 {
@@ -23,9 +25,6 @@ internal class GuiltCommand : BaseCommand
 
     private void ResetGuilt()
     {
-        if (StatStorage.TryGetRangeStat("Guilt", out var stat))
-        {
-            StatStorage.PlayerStats.SetCurrentValue(stat, 0);
-        }
+        AssetStorage.PlayerStats.SetCurrentValue(AssetStorage.RangeStats["Guilt"], 0);
     }
 }

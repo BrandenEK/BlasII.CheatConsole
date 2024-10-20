@@ -31,11 +31,8 @@ internal abstract class BaseValueStatCommand(string name, string statName) : Bas
 
     private void Add(int amount)
     {
-        if (AssetStorage.ValueStats.TryGetAsset(_statName, out var stat))
-        {
-            Write($"Adding {amount} {Name}");
-            AssetStorage.PlayerStats.AddToCurrentValue(stat, amount);
-        }
+        Write($"Adding {amount} {Name}");
+        AssetStorage.PlayerStats.AddToCurrentValue(AssetStorage.ValueStats[_statName], amount);
     }
 }
 

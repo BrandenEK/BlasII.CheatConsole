@@ -1,4 +1,6 @@
 ﻿using BlasII.CheatConsole.Commands;
+using BlasII.CheatConsole.Commands.Items;
+using BlasII.CheatConsole.Commands.Stats;
 using BlasII.Framework.UI;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;

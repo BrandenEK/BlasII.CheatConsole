@@ -1,4 +1,5 @@
-﻿using Il2CppTGK.Game;
+﻿using BlasII.ModdingAPI.Assets;
+using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
@@ -48,13 +49,13 @@ internal class AbilityCommand : BaseCommand
         if (id == "all")
         {
             Write("Unlocking all abilities!");
-            foreach (var ab in AbilityStorage.GetAllAbilities())
+            foreach (var ab in AssetStorage.Abilities.AllAssets)
                 CoreCache.AbilitiesUnlockManager.SetAbility(ab.Value, true);
             return;
         }
 
         // Check if the single ability exists
-        if (!AbilityStorage.TryGetAbility(id.ToUpper(), out var ability))
+        if (!AssetStorage.Abilities.TryGetAsset(id.ToUpper(), out var ability))
         {
             WriteFailure($"Ability {id} does not exist!");
             return;
@@ -71,13 +72,13 @@ internal class AbilityCommand : BaseCommand
         if (id == "all")
         {
             Write("Locking all abilities!");
-            foreach (var ab in AbilityStorage.GetAllAbilities())
+            foreach (var ab in AssetStorage.Abilities.AllAssets)
                 CoreCache.AbilitiesUnlockManager.SetAbility(ab.Value, false);
             return;
         }
 
         // Check if the single ability exists
-        if (!AbilityStorage.TryGetAbility(id.ToUpper(), out var ability))
+        if (!AssetStorage.Abilities.TryGetAsset(id.ToUpper(), out var ability))
         {
             WriteFailure($"Ability {id} does not exist!");
             return;
@@ -90,7 +91,7 @@ internal class AbilityCommand : BaseCommand
 
     private void ListAbilities()
     {
-        foreach (var ability in AbilityStorage.GetAllAbilities())
+        foreach (var ability in AssetStorage.Abilities.AllAssets)
         {
             Write($"{ability.Key}: {ability.Value.name}");
         }

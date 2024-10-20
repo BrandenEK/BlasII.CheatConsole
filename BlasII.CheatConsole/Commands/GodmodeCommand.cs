@@ -1,4 +1,7 @@
-﻿namespace BlasII.CheatConsole.Commands;
+﻿using BlasII.ModdingAPI.Assets;
+using BlasII.ModdingAPI.Helpers;
+
+namespace BlasII.CheatConsole.Commands;
 
 internal class GodmodeCommand : BaseCommand
 {
@@ -24,16 +27,10 @@ internal class GodmodeCommand : BaseCommand
 
     public override void Update()
     {
-        if (_active && Main.CheatConsole.LoadStatus.GameSceneLoaded)
+        if (_active && SceneHelper.GameSceneLoaded)
         {
-            if (StatStorage.TryGetRangeStat("Health", out var health))
-            {
-                StatStorage.PlayerStats.SetCurrentToMax(health);
-            }
-            if (StatStorage.TryGetRangeStat("Fervour", out var fervour))
-            {
-                StatStorage.PlayerStats.SetCurrentToMax(fervour);
-            }
+            AssetStorage.PlayerStats.SetCurrentToMax(AssetStorage.RangeStats["Health"]);
+            AssetStorage.PlayerStats.SetCurrentToMax(AssetStorage.RangeStats["Fervour"]);
         }
     }
 

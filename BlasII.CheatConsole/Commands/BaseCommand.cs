@@ -1,4 +1,5 @@
-﻿
+﻿using BlasII.ModdingAPI;
+
 namespace BlasII.CheatConsole.Commands;
 
 public abstract class BaseCommand
@@ -17,7 +18,7 @@ public abstract class BaseCommand
         bool isValid = paramaters.Length == num;
 
         if (!isValid)
-            Main.CheatConsole.LogError($"This command requires {num} parameters!");
+            ModLog.Error($"This command requires {num} parameters!");
 
         return isValid;
     }
@@ -27,12 +28,12 @@ public abstract class BaseCommand
         bool isValid = int.TryParse(parameter, out result);
 
         if (!isValid)
-            Main.CheatConsole.LogError($"Parameter '{parameter}' is not a valid integer!");
+            ModLog.Error($"Parameter '{parameter}' is not a valid integer!");
 
         return isValid;
     }
 
-    protected void Write(string message) => Main.CheatConsole.Log("[CONSOLE] " + message);
+    protected void Write(string message) => ModLog.Info("[CONSOLE] " + message);
 
-    protected void WriteFailure(string message) => Main.CheatConsole.LogError("[CONSOLE] " + message);
+    protected void WriteFailure(string message) => ModLog.Error("[CONSOLE] " + message);
 }

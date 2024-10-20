@@ -1,4 +1,5 @@
-﻿using Il2CppTGK.Game;
+﻿using BlasII.ModdingAPI.Assets;
+using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
@@ -56,13 +57,13 @@ internal class WeaponCommand : BaseCommand
         if (id == "all")
         {
             Write("Unlocking all weapons!");
-            foreach (var w in WeaponStorage.GetAllWeapons())
+            foreach (var w in AssetStorage.Weapons.AllAssets)
                 CoreCache.EquipmentManager.Unlock(w.Value);
             return;
         }
 
         // Check if the single weapon exists
-        if (!WeaponStorage.TryGetWeapon(id.ToUpper(), out var weapon))
+        if (!AssetStorage.Weapons.TryGetAsset(id.ToUpper(), out var weapon))
         {
             WriteFailure($"Weapon {id} does not exist!");
             return;
@@ -79,13 +80,13 @@ internal class WeaponCommand : BaseCommand
         if (id == "all")
         {
             Write("Locking all weapons!");
-            foreach (var w in WeaponStorage.GetAllWeapons())
+            foreach (var w in AssetStorage.Weapons.AllAssets)
                 CoreCache.EquipmentManager.Lock(w.Value);
             return;
         }
 
         // Check if the single weapon exists
-        if (!WeaponStorage.TryGetWeapon(id.ToUpper(), out var weapon))
+        if (!AssetStorage.Weapons.TryGetAsset(id.ToUpper(), out var weapon))
         {
             WriteFailure($"Weapon {id} does not exist!");
             return;
@@ -99,7 +100,7 @@ internal class WeaponCommand : BaseCommand
     private void UpgradeWeapon(string id)
     {
         // Check if the weapon exists
-        if (!WeaponStorage.TryGetWeapon(id.ToUpper(), out var weapon))
+        if (!AssetStorage.Weapons.TryGetAsset(id.ToUpper(), out var weapon))
         {
             WriteFailure($"Weapon {id} does not exist!");
             return;
@@ -112,7 +113,7 @@ internal class WeaponCommand : BaseCommand
 
     private void ListWeapons()
     {
-        foreach (var weapon in WeaponStorage.GetAllWeapons())
+        foreach (var weapon in AssetStorage.Weapons.AllAssets)
         {
             Write($"{weapon.Key}: {weapon.Value.name}");
         }

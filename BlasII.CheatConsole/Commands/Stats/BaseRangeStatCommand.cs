@@ -2,7 +2,7 @@
 
 namespace BlasII.CheatConsole.Commands.Stats;
 
-internal abstract class BaseRangeStatCommand(string name, string statName) : BaseCommand(name)
+internal abstract class BaseRangeStatCommand(string name, string statName) : ModCommand(name)
 {
     private readonly string _statName = statName;
 

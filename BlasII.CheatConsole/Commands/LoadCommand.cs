@@ -3,7 +3,7 @@ using Il2CppTGK.Game.PlayerSpawn;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class LoadCommand : BaseCommand
+internal class LoadCommand : ModCommand
 {
     public LoadCommand() : base("load") { }
 

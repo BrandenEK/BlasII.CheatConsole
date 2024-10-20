@@ -2,7 +2,7 @@
 
 namespace BlasII.CheatConsole.Commands.Stats;
 
-internal class GuiltCommand : BaseCommand
+internal class GuiltCommand : ModCommand
 {
     public GuiltCommand() : base("guilt") { }
 

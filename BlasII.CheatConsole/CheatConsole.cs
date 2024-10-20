@@ -6,6 +6,7 @@ using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
 using Il2CppTMPro;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BlasII.CheatConsole;
@@ -17,22 +18,11 @@ public class CheatConsole : BlasIIMod
 {
     internal CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
-    private readonly Dictionary<string, BaseCommand> _commands = new();
-
     private RectTransform consoleObject;
     private TextMeshProUGUI consoleText;
 
     private bool _enabled = false;
     private string _currentText = string.Empty;
-
-    public void RegisterCommand(BaseCommand command)
-    {
-        if (command.Name.Length > 0 && !_commands.ContainsKey(command.Name))
-        {
-            _commands.Add(command.Name, command);
-            ModLog.Info("Registering new command: " + command.Name);
-        }
-    }
 
     /// <summary>
     /// Register and initialize handlers
@@ -43,28 +33,6 @@ public class CheatConsole : BlasIIMod
         {
             { "ToggleConsole", KeyCode.Backslash }
         });
-
-        RegisterCommand(new BeadCommand());
-        RegisterCommand(new FigureCommand());
-        RegisterCommand(new QuestItemCommand());
-        RegisterCommand(new PrayerCommand());
-
-        RegisterCommand(new AbilityCommand());
-
-        RegisterCommand(new WeaponCommand());
-
-        RegisterCommand(new HealthCommand());
-        RegisterCommand(new FervourCommand());
-        RegisterCommand(new FlaskCommand());
-        RegisterCommand(new TearsCommand());
-        RegisterCommand(new MarksCommand());
-        RegisterCommand(new GuiltCommand());
-
-        RegisterCommand(new PrieDieuCommand());
-        RegisterCommand(new QuestCommand());
-
-        RegisterCommand(new GodmodeCommand());
-        RegisterCommand(new LoadCommand());
     }
 
     /// <summary>
@@ -102,7 +70,7 @@ public class CheatConsole : BlasIIMod
                 OnDisable();
         }
 
-        foreach (var cmd in _commands.Values)
+        foreach (var cmd in CommandRegister.Commands)
         {
             cmd.Update();
         }
@@ -170,7 +138,8 @@ public class CheatConsole : BlasIIMod
         }
         parts[0] = parts[0].ToLower();
 
-        if (!_commands.ContainsKey(parts[0]))
+        ModCommand cmd = CommandRegister.Commands.FirstOrDefault(x => x.Name == parts[0]);
+        if (cmd == null)
         {
             ModLog.Error($"[CONSOLE] Command '{parts[0]}' is not a valid command!");
             return;
@@ -182,7 +151,7 @@ public class CheatConsole : BlasIIMod
             return;
         }
 
-        _commands[parts[0]].Execute(parts[1..]);
+        cmd.Execute(parts[1..]);
     }
 
     private GameObject GetConsoleObject()
@@ -221,5 +190,32 @@ public class CheatConsole : BlasIIMod
 
         consoleObject.gameObject.SetActive(false);
         return consoleObject.gameObject;
+    }
+
+    /// <summary>
+    /// Register all built-in commands
+    /// </summary>
+    protected override void OnRegisterServices(ModServiceProvider provider)
+    {
+        provider.RegisterCommand(new BeadCommand());
+        provider.RegisterCommand(new FigureCommand());
+        provider.RegisterCommand(new QuestItemCommand());
+        provider.RegisterCommand(new PrayerCommand());
+
+        provider.RegisterCommand(new AbilityCommand());
+        provider.RegisterCommand(new WeaponCommand());
+
+        provider.RegisterCommand(new HealthCommand());
+        provider.RegisterCommand(new FervourCommand());
+        provider.RegisterCommand(new FlaskCommand());
+        provider.RegisterCommand(new TearsCommand());
+        provider.RegisterCommand(new MarksCommand());
+        provider.RegisterCommand(new GuiltCommand());
+
+        provider.RegisterCommand(new PrieDieuCommand());
+        provider.RegisterCommand(new QuestCommand());
+
+        provider.RegisterCommand(new GodmodeCommand());
+        provider.RegisterCommand(new LoadCommand());
     }
 }

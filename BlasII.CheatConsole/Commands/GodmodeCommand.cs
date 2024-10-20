@@ -3,7 +3,7 @@ using BlasII.ModdingAPI.Helpers;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class GodmodeCommand : BaseCommand
+internal class GodmodeCommand : ModCommand
 {
     public GodmodeCommand() : base("godmode") { }
 

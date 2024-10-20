@@ -1,6 +1,15 @@
 # Blasphemous 2 Cheat Console
 
-To run commands, press backslash to open the console
+<img src="https://img.shields.io/github/downloads/BrandenEK/BlasII.CheatConsole/total?color=872124&style=for-the-badge">
+
+---
+
+## Features
+- Press backslash to open the debug console
+
+## Installation
+This mod is available for download through the [Blasphemous Mod Installer](https://github.com/BrandenEK/Blasphemous.Modding.Installer)
+- Required dependencies: Modding API, UI Framework
 
 ---
 

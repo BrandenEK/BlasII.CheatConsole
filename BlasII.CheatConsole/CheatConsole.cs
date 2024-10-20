@@ -1,13 +1,20 @@
 ﻿using BlasII.CheatConsole.Commands;
+using BlasII.Framework.UI;
 using BlasII.ModdingAPI;
+using BlasII.ModdingAPI.Helpers;
 using Il2CppTMPro;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BlasII.CheatConsole;
 
+/// <summary>
+/// Adds a console with various debug commands
+/// </summary>
 public class CheatConsole : BlasIIMod
 {
+    internal CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
+
     private readonly Dictionary<string, BaseCommand> _commands = new();
 
     private RectTransform consoleObject;
@@ -16,17 +23,18 @@ public class CheatConsole : BlasIIMod
     private bool _enabled = false;
     private string _currentText = string.Empty;
 
-    public CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
-
     public void RegisterCommand(BaseCommand command)
     {
         if (command.Name.Length > 0 && !_commands.ContainsKey(command.Name))
         {
             _commands.Add(command.Name, command);
-            Log("Registering new command: " + command.Name);
+            ModLog.Info("Registering new command: " + command.Name);
         }
     }
 
+    /// <summary>
+    /// Register and initialize handlers
+    /// </summary>
     protected override void OnInitialize()
     {
         InputHandler.RegisterDefaultKeybindings(new Dictionary<string, KeyCode>()
@@ -57,6 +65,9 @@ public class CheatConsole : BlasIIMod
         RegisterCommand(new LoadCommand());
     }
 
+    /// <summary>
+    /// Disable console when leaving a scene
+    /// </summary>
     protected override void OnSceneUnloaded(string sceneName)
     {
         if (_enabled)
@@ -66,6 +77,9 @@ public class CheatConsole : BlasIIMod
         }
     }
 
+    /// <summary>
+    /// Process input and update commands
+    /// </summary>
     protected override void OnUpdate()
     {
         if (_enabled)
@@ -73,7 +87,7 @@ public class CheatConsole : BlasIIMod
             ProcessKeyInput();
         }
 
-        bool canToggle = (!InputHandler.InputBlocked && LoadStatus.GameSceneLoaded) || _enabled;
+        bool canToggle = _enabled || (!InputHandler.InputBlocked && SceneHelper.GameSceneLoaded);
 
         if (InputHandler.GetKeyDown("ToggleConsole") && canToggle)
         {
@@ -144,25 +158,25 @@ public class CheatConsole : BlasIIMod
 
     private void ProcessCommand(string command)
     {
-        LogCustom("[CONSOLE] " + command, System.Drawing.Color.White);
+        ModLog.Custom("[CONSOLE] " + command, System.Drawing.Color.White);
         string[] parts = command.Trim().Split(' ');
 
         if (parts.Length < 1)
         {
-            LogError($"[CONSOLE] No command was entered!");
+            ModLog.Error($"[CONSOLE] No command was entered!");
             return;
         }
         parts[0] = parts[0].ToLower();
 
         if (!_commands.ContainsKey(parts[0]))
         {
-            LogError($"[CONSOLE] Command '{parts[0]}' is not a valid command!");
+            ModLog.Error($"[CONSOLE] Command '{parts[0]}' is not a valid command!");
             return;
         }
 
         if (parts.Length < 2)
         {
-            LogError($"[CONSOLE] Every command needs at least one parameter!");
+            ModLog.Error($"[CONSOLE] Every command needs at least one parameter!");
             return;
         }
 

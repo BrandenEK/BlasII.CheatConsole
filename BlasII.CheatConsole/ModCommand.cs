@@ -1,13 +1,13 @@
 ﻿using BlasII.ModdingAPI;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole;
 
-public abstract class BaseCommand
+public abstract class ModCommand
 {
     private readonly string _name;
     public string Name => _name;
 
-    public BaseCommand(string name) => _name = name;
+    public ModCommand(string name) => _name = name;
 
     public abstract void Execute(string[] args);
 

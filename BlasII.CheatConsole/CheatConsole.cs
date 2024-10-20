@@ -17,7 +17,7 @@ public class CheatConsole : BlasIIMod
 {
     internal CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
-    private readonly Dictionary<string, BaseCommand> _commands = new();
+    private readonly Dictionary<string, ModCommand> _commands = new();
 
     private RectTransform consoleObject;
     private TextMeshProUGUI consoleText;
@@ -25,7 +25,7 @@ public class CheatConsole : BlasIIMod
     private bool _enabled = false;
     private string _currentText = string.Empty;
 
-    public void RegisterCommand(BaseCommand command)
+    public void RegisterCommand(ModCommand command)
     {
         if (command.Name.Length > 0 && !_commands.ContainsKey(command.Name))
         {

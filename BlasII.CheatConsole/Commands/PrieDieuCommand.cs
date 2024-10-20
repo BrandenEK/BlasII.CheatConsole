@@ -2,7 +2,7 @@
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class PrieDieuCommand : BaseCommand
+internal class PrieDieuCommand : ModCommand
 {
     public PrieDieuCommand() : base("priedieu") { }
 

@@ -49,13 +49,13 @@ internal class AbilityCommand : ModCommand
         if (id == "all")
         {
             Write("Unlocking all abilities!");
-            foreach (var ab in AssetStorage.Abilities.AllAssets)
+            foreach (var ab in AssetStorage.Abilities)
                 CoreCache.AbilitiesUnlockManager.SetAbility(ab.Value, true);
             return;
         }
 
         // Check if the single ability exists
-        if (!AssetStorage.Abilities.TryGetAsset(id.ToUpper(), out var ability))
+        if (!AssetStorage.Abilities.TryGetValue(id.ToUpper(), out var ability))
         {
             WriteFailure($"Ability {id} does not exist!");
             return;
@@ -72,13 +72,13 @@ internal class AbilityCommand : ModCommand
         if (id == "all")
         {
             Write("Locking all abilities!");
-            foreach (var ab in AssetStorage.Abilities.AllAssets)
+            foreach (var ab in AssetStorage.Abilities)
                 CoreCache.AbilitiesUnlockManager.SetAbility(ab.Value, false);
             return;
         }
 
         // Check if the single ability exists
-        if (!AssetStorage.Abilities.TryGetAsset(id.ToUpper(), out var ability))
+        if (!AssetStorage.Abilities.TryGetValue(id.ToUpper(), out var ability))
         {
             WriteFailure($"Ability {id} does not exist!");
             return;
@@ -91,9 +91,9 @@ internal class AbilityCommand : ModCommand
 
     private void ListAbilities()
     {
-        foreach (var ability in AssetStorage.Abilities.AllAssets)
+        foreach (var ability in AssetStorage.Abilities)
         {
-            Write($"{ability.Key}: {ability.Value.name}");
+            Write($"{ability.Id}: {ability.StaticId}");
         }
     }
 }

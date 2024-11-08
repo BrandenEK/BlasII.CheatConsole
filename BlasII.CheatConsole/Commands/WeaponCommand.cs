@@ -57,13 +57,13 @@ internal class WeaponCommand : ModCommand
         if (id == "all")
         {
             Write("Unlocking all weapons!");
-            foreach (var w in AssetStorage.Weapons.AllAssets)
+            foreach (var w in AssetStorage.Weapons)
                 CoreCache.EquipmentManager.Unlock(w.Value);
             return;
         }
 
         // Check if the single weapon exists
-        if (!AssetStorage.Weapons.TryGetAsset(id.ToUpper(), out var weapon))
+        if (!AssetStorage.Weapons.TryGetValue(id.ToUpper(), out var weapon))
         {
             WriteFailure($"Weapon {id} does not exist!");
             return;
@@ -80,13 +80,13 @@ internal class WeaponCommand : ModCommand
         if (id == "all")
         {
             Write("Locking all weapons!");
-            foreach (var w in AssetStorage.Weapons.AllAssets)
+            foreach (var w in AssetStorage.Weapons)
                 CoreCache.EquipmentManager.Lock(w.Value);
             return;
         }
 
         // Check if the single weapon exists
-        if (!AssetStorage.Weapons.TryGetAsset(id.ToUpper(), out var weapon))
+        if (!AssetStorage.Weapons.TryGetValue(id.ToUpper(), out var weapon))
         {
             WriteFailure($"Weapon {id} does not exist!");
             return;
@@ -100,7 +100,7 @@ internal class WeaponCommand : ModCommand
     private void UpgradeWeapon(string id)
     {
         // Check if the weapon exists
-        if (!AssetStorage.Weapons.TryGetAsset(id.ToUpper(), out var weapon))
+        if (!AssetStorage.Weapons.TryGetValue(id.ToUpper(), out var weapon))
         {
             WriteFailure($"Weapon {id} does not exist!");
             return;
@@ -113,9 +113,9 @@ internal class WeaponCommand : ModCommand
 
     private void ListWeapons()
     {
-        foreach (var weapon in AssetStorage.Weapons.AllAssets)
+        foreach (var weapon in AssetStorage.Weapons)
         {
-            Write($"{weapon.Key}: {weapon.Value.name}");
+            Write($"{weapon.Id}: {weapon.StaticId}");
         }
     }
 }

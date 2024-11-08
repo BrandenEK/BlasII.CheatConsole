@@ -1,8 +1,8 @@
 ﻿using BlasII.ModdingAPI.Assets;
 
-namespace BlasII.CheatConsole.Commands.Stats;
+namespace BlasII.CheatConsole.Commands;
 
-internal abstract class BaseRangeStatCommand(string name, string statName) : ModCommand(name)
+internal class RangeStatCommand(string name, string statName) : ModCommand(name)
 {
     private readonly string _statName = statName;
 
@@ -77,19 +77,4 @@ internal abstract class BaseRangeStatCommand(string name, string statName) : Mod
         AssetStorage.PlayerStats.Upgrade(AssetStorage.RangeStats[_statName]);
         AssetStorage.PlayerStats.SetCurrentToMax(AssetStorage.RangeStats[_statName]);
     }
-}
-
-internal class HealthCommand : BaseRangeStatCommand
-{
-    public HealthCommand() : base("health", "Health") { }
-}
-
-internal class FervourCommand : BaseRangeStatCommand
-{
-    public FervourCommand() : base("fervour", "Fervour") { }
-}
-
-internal class FlaskCommand : BaseRangeStatCommand
-{
-    public FlaskCommand() : base("flask", "Flask") { }
 }

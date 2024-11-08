@@ -1,6 +1,6 @@
 ﻿using BlasII.ModdingAPI.Assets;
 
-namespace BlasII.CheatConsole.Commands.Stats;
+namespace BlasII.CheatConsole.Commands;
 
 internal class GuiltCommand : ModCommand
 {

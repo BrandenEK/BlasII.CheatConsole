@@ -1,8 +1,8 @@
 ﻿using BlasII.ModdingAPI.Assets;
 
-namespace BlasII.CheatConsole.Commands.Stats;
+namespace BlasII.CheatConsole.Commands;
 
-internal abstract class BaseValueStatCommand(string name, string statName) : ModCommand(name)
+internal class ValueStatCommand(string name, string statName) : ModCommand(name)
 {
     private readonly string _statName = statName;
 
@@ -34,14 +34,4 @@ internal abstract class BaseValueStatCommand(string name, string statName) : Mod
         Write($"Adding {amount} {Name}");
         AssetStorage.PlayerStats.AddToCurrentValue(AssetStorage.ValueStats[_statName], amount);
     }
-}
-
-internal class TearsCommand : BaseValueStatCommand
-{
-    public TearsCommand() : base("tears", "Tears") { }
-}
-
-internal class MarksCommand : BaseValueStatCommand
-{
-    public MarksCommand() : base("marks", "Orbs") { }
 }

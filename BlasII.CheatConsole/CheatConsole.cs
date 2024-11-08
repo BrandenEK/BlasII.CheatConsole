@@ -1,9 +1,9 @@
 ﻿using BlasII.CheatConsole.Commands;
-using BlasII.CheatConsole.Commands.Items;
-using BlasII.CheatConsole.Commands.Stats;
 using BlasII.Framework.UI;
 using BlasII.ModdingAPI;
+using BlasII.ModdingAPI.Assets;
 using BlasII.ModdingAPI.Helpers;
+using Il2CppTGK.Inventory;
 using Il2CppTMPro;
 using System.Collections.Generic;
 using System.Linq;
@@ -197,19 +197,19 @@ public class CheatConsole : BlasIIMod
     /// </summary>
     protected override void OnRegisterServices(ModServiceProvider provider)
     {
-        provider.RegisterCommand(new BeadCommand());
-        provider.RegisterCommand(new FigureCommand());
-        provider.RegisterCommand(new QuestItemCommand());
-        provider.RegisterCommand(new PrayerCommand());
+        provider.RegisterCommand(new ItemCommand<RosaryBeadItemID>("bead", AssetStorage.Beads));
+        provider.RegisterCommand(new ItemCommand<FigureItemID>("figure", AssetStorage.Figures));
+        provider.RegisterCommand(new ItemCommand<PrayerItemID>("prayer", AssetStorage.Prayers));
+        provider.RegisterCommand(new ItemCommand<QuestItemID>("questitem", AssetStorage.QuestItems));
 
         provider.RegisterCommand(new AbilityCommand());
         provider.RegisterCommand(new WeaponCommand());
 
-        provider.RegisterCommand(new HealthCommand());
-        provider.RegisterCommand(new FervourCommand());
-        provider.RegisterCommand(new FlaskCommand());
-        provider.RegisterCommand(new TearsCommand());
-        provider.RegisterCommand(new MarksCommand());
+        provider.RegisterCommand(new RangeStatCommand("health", "Health"));
+        provider.RegisterCommand(new RangeStatCommand("fervour", "Fervour"));
+        provider.RegisterCommand(new RangeStatCommand("flask", "Flask"));
+        provider.RegisterCommand(new ValueStatCommand("tears", "Tears"));
+        provider.RegisterCommand(new ValueStatCommand("marks", "Orbs"));
         provider.RegisterCommand(new GuiltCommand());
 
         provider.RegisterCommand(new PrieDieuCommand());

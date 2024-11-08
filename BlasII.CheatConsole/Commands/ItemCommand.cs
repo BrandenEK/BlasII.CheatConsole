@@ -2,11 +2,11 @@
 using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Inventory;
 
-namespace BlasII.CheatConsole.Commands.Items;
+namespace BlasII.CheatConsole.Commands;
 
-internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage) : ModCommand(name) where T : ItemID
+internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : ModCommand(name) where T : ItemID
 {
-    private readonly TypedStorage<T> _storage = storage;
+    private readonly GenericSingleStorage<T> _storage = storage;
 
     public override sealed void Execute(string[] args)
     {
@@ -50,13 +50,13 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
         if (id == "all")
         {
             Write($"Adding all {Name}s!");
-            foreach (var asset in _storage.AllAssets)
+            foreach (var asset in _storage)
                 AssetStorage.PlayerInventory.AddItemAsync(asset.Value);
             return;
         }
 
         // Check if the single item exists
-        if (!_storage.TryGetAsset(id.ToUpper(), out var item))
+        if (!_storage.TryGetValue(id.ToUpper(), out var item))
         {
             WriteFailure($"{Name.Capitalize()} {id} does not exist!");
             return;
@@ -73,13 +73,13 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
         if (id == "all")
         {
             Write($"Removing all {Name}s!");
-            foreach (var asset in _storage.AllAssets)
+            foreach (var asset in _storage)
                 AssetStorage.PlayerInventory.RemoveItem(asset.Value);
             return;
         }
 
         // Check if the single item exists
-        if (!_storage.TryGetAsset(id.ToUpper(), out var item))
+        if (!_storage.TryGetValue(id.ToUpper(), out var item))
         {
             WriteFailure($"{Name.Capitalize()} {id} does not exist!");
             return;
@@ -92,9 +92,9 @@ internal abstract class BaseItemCommand<T>(string name, TypedStorage<T> storage)
 
     private void ListItems()
     {
-        foreach (var item in _storage.AllAssets)
+        foreach (var item in _storage)
         {
-            Write($"{item.Key}: {item.Value.caption}");
+            Write($"{item.Id}: {item.Value.caption}");
         }
     }
 }

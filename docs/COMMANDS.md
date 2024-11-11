@@ -1,5 +1,10 @@
 # Blasphemous 2 console commands
 
+### Help
+```help``` - Lists all available commands
+
+---
+
 ### Beads
 ```bead add {id}``` - Adds the specified bead to the inventory
 
@@ -33,6 +38,26 @@
 ```questitem remove {id}``` - Removes the specified quest item from the inventory
 
 ```questitem list``` - Lists all of the existing quest items
+
+---
+
+### Abilities
+```ability unlock {id}``` - Unlocks the specified ability
+
+```ability lock {id}``` - Locks the specified ability
+
+```ability list``` - Lists all of the existing abilities
+
+---
+
+### Weapons
+```weapon unlock {id}``` - Unlocks the specified weapon
+
+```weapon lock {id}``` - Locks the specified weapon
+
+```weapon upgrade {id}``` - Upgrades the specified weapon
+
+```weapon list``` - Lists all of the existing weapons
 
 ---
 
@@ -72,35 +97,36 @@
 ### Tears
 ```tears add {amount}``` - Adds the specified amount of tears
 
+```tears current``` - Displays the current amount of tears
+
 ---
 
-### Marks
+### Marks of Martyrdom
 ```marks add {amount}``` - Adds the specified amount of marks
+
+```marks current``` - Displays the current amount of marks
+
+---
+
+### Marks of the Preceptor
+```pmarks add {amount}``` - Adds the specified amount of marks
+
+```pmarks current``` - Displays the current amount of marks
+
+---
+
+### Attack power
+```attack add {amount}``` - Adds the specified amount to attack
+
+---
+
+### Defense power
+```defense add {amount}``` - Adds the specified amount to defense
 
 ---
 
 ### Guilt
 ```guilt reset``` - Resets guilt to 0
-
----
-
-### Abilities
-```ability unlock {id}``` - Unlocks the specified ability
-
-```ability lock {id}``` - Locks the specified ability
-
-```ability list``` - Lists all of the existing abilities
-
----
-
-### Weapons
-```weapon unlock {id}``` - Unlocks the specified weapon
-
-```weapon lock {id}``` - Locks the specified weapon
-
-```weapon upgrade {id}``` - Upgrades the specified weapon
-
-```weapon list``` - Lists all of the existing weapons
 
 ---
 

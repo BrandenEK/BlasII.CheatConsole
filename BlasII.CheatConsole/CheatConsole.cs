@@ -210,6 +210,7 @@ public class CheatConsole : BlasIIMod
         provider.RegisterCommand(new RangeStatCommand("flask", "Flask"));
         provider.RegisterCommand(new ValueStatCommand("tears", "Tears"));
         provider.RegisterCommand(new ValueStatCommand("marks", "Orbs"));
+        provider.RegisterCommand(new ValueStatCommand("pmarks", "MarksPreceptor"));
         provider.RegisterCommand(new GuiltCommand());
 
         provider.RegisterCommand(new PrieDieuCommand());

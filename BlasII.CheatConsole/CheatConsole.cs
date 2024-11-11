@@ -211,6 +211,8 @@ public class CheatConsole : BlasIIMod
         provider.RegisterCommand(new ValueStatCommand("tears", "Tears"));
         provider.RegisterCommand(new ValueStatCommand("marks", "Orbs"));
         provider.RegisterCommand(new ValueStatCommand("pmarks", "MarksPreceptor"));
+        provider.RegisterCommand(new ModifyStatCommand("attack", "BasePhysicalattack"));
+        provider.RegisterCommand(new ModifyStatCommand("defense", "GlobalDefense"));
         provider.RegisterCommand(new GuiltCommand());
 
         provider.RegisterCommand(new PrieDieuCommand());

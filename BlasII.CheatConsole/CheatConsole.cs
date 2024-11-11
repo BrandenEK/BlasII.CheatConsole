@@ -145,9 +145,9 @@ public class CheatConsole : BlasIIMod
             return;
         }
 
-        if (parts.Length < 2)
+        if (cmd.NeedsParameters && parts.Length < 2)
         {
-            ModLog.Error($"[CONSOLE] Every command needs at least one parameter!");
+            ModLog.Error($"[CONSOLE] Command '{parts[0]}' needs at least one parameter!");
             return;
         }
 
@@ -197,6 +197,8 @@ public class CheatConsole : BlasIIMod
     /// </summary>
     protected override void OnRegisterServices(ModServiceProvider provider)
     {
+        provider.RegisterCommand(new HelpCommand());
+
         provider.RegisterCommand(new ItemCommand<RosaryBeadItemID>("bead", AssetStorage.Beads));
         provider.RegisterCommand(new ItemCommand<FigureItemID>("figure", AssetStorage.Figures));
         provider.RegisterCommand(new ItemCommand<PrayerItemID>("prayer", AssetStorage.Prayers));

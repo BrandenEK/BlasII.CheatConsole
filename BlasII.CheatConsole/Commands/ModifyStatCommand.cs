@@ -2,7 +2,7 @@
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class ValueStatCommand(string name, string statName) : ModCommand(name)
+internal class ModifyStatCommand(string name, string statName) : ModCommand(name)
 {
     private readonly string _statName = statName;
 
@@ -21,14 +21,6 @@ internal class ValueStatCommand(string name, string statName) : ModCommand(name)
                     Add(amount);
                     break;
                 }
-            case "current":
-                {
-                    if (!ValidateParameterCount(args, 1))
-                        return;
-
-                    Current();
-                    break;
-                }
             default:
                 {
                     WriteFailure("Unknown subcommand: " + args[0]);
@@ -40,12 +32,6 @@ internal class ValueStatCommand(string name, string statName) : ModCommand(name)
     private void Add(int amount)
     {
         Write($"Adding {amount} {Name}");
-        AssetStorage.PlayerStats.AddToCurrentValue(AssetStorage.ValueStats[_statName], amount);
-    }
-
-    private void Current()
-    {
-        int amount = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.ValueStats[_statName]);
-        Write($"Current {Name} is {amount}");
+        AssetStorage.PlayerStats.AddBonus(AssetStorage.ModifiableStats[_statName], "cheat", amount, 0);
     }
 }

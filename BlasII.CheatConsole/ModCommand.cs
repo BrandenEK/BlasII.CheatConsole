@@ -35,7 +35,7 @@ public abstract class ModCommand(string name)
         bool isValid = paramaters.Length == num;
 
         if (!isValid)
-            ModLog.Error($"This command requires {num} parameters!");
+            WriteFailure($"This command requires {num} parameters!");
 
         return isValid;
     }
@@ -48,7 +48,7 @@ public abstract class ModCommand(string name)
         bool isValid = int.TryParse(parameter, out result);
 
         if (!isValid)
-            ModLog.Error($"Parameter '{parameter}' is not a valid integer!");
+            WriteFailure($"Parameter '{parameter}' is not a valid integer!");
 
         return isValid;
     }

@@ -151,7 +151,14 @@ public class CheatConsole : BlasIIMod
             return;
         }
 
-        cmd.Execute(parts[1..]);
+        try
+        {
+            cmd.Execute(parts[1..]);
+        }
+        catch (System.Exception ex)
+        {
+            ModLog.Error($"[CONSOLE] Command '{parts[0]}' failed to execute - {ex}");
+        }
     }
 
     private GameObject GetConsoleObject()

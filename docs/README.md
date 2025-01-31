@@ -6,6 +6,8 @@
 
 ## Features
 - Press backslash to open the debug console
+- Use the up/down arrow keys to navigate to previous commands
+- To enter arguments with spaces, surround it with quotes
 - All available commands can be found [here](COMMANDS.md)
 
 ## Installation

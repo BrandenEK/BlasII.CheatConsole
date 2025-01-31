@@ -34,7 +34,9 @@ public class CheatConsole : BlasIIMod
     {
         InputHandler.RegisterDefaultKeybindings(new Dictionary<string, KeyCode>()
         {
-            { "ToggleConsole", KeyCode.Backslash }
+            { "ToggleConsole", KeyCode.Backslash },
+            { "PreviousCommand", KeyCode.UpArrow },
+            { "NextCommand", KeyCode.DownArrow },
         });
     }
 
@@ -57,10 +59,10 @@ public class CheatConsole : BlasIIMod
     {
         if (_enabled)
         {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.UpArrow))
+            if (InputHandler.GetKeyDown("PreviousCommand"))
                 _currentText = _history.GetPreviousCommand();
 
-            if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow))
+            if (InputHandler.GetKeyDown("NextCommand"))
                 _currentText = _history.GetNextCommand();
 
             ProcessKeyInput();

@@ -9,13 +9,17 @@ internal class LoadCommand : ModCommand
 
     public override void Execute(string[] args)
     {
+        string scene;
         int entry;
+
         if (args.Length == 1)
         {
+            scene = args[0].ToUpper();
             entry = 0;
         }
         else if (args.Length == 2)
         {
+            scene = args[0].ToUpper();
             if (!ValidateIntParamater(args[1], out entry))
                 return;
         }
@@ -25,7 +29,13 @@ internal class LoadCommand : ModCommand
             return;
         }
 
-        LoadRoom(args[0], entry);
+        if (!CoreCache.Room.ExistsRoom(scene))
+        {
+            WriteFailure($"Room {scene} does not exist");
+            return;
+        }
+
+        LoadRoom(scene, entry);
     }
 
     private void LoadRoom(string room, int entry)

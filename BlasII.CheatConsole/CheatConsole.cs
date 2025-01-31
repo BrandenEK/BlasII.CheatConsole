@@ -7,6 +7,7 @@ using Il2CppTGK.Inventory;
 using Il2CppTMPro;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace BlasII.CheatConsole;
@@ -129,35 +130,40 @@ public class CheatConsole : BlasIIMod
     private void ProcessCommand(string command)
     {
         ModLog.Custom("[CONSOLE] " + command, System.Drawing.Color.White);
-        string[] parts = command.Trim().Split(' ');
+        command = command.Trim();
 
-        if (parts.Length < 1)
+        if (string.IsNullOrEmpty(command))
         {
             ModLog.Error($"[CONSOLE] No command was entered!");
             return;
         }
-        parts[0] = parts[0].ToLower();
 
-        ModCommand cmd = CommandRegister.Commands.FirstOrDefault(x => x.Name == parts[0]);
+        var parts = Regex.Matches(command, @"[\""].+?[\""]|[^ ]+")
+                .Cast<Match>()
+                .Select(x => x.Value.Trim('"'));
+        string name = parts.First().ToLower();
+        string[] args = parts.Skip(1).ToArray();
+
+        ModCommand cmd = CommandRegister.Commands.FirstOrDefault(x => x.Name == name);
         if (cmd == null)
         {
-            ModLog.Error($"[CONSOLE] Command '{parts[0]}' is not a valid command!");
+            ModLog.Error($"[CONSOLE] Command '{name}' is not a valid command!");
             return;
         }
 
-        if (cmd.NeedsParameters && parts.Length < 2)
+        if (cmd.NeedsParameters && args.Length < 1)
         {
-            ModLog.Error($"[CONSOLE] Command '{parts[0]}' needs at least one parameter!");
+            ModLog.Error($"[CONSOLE] Command '{name}' needs at least one parameter!");
             return;
         }
 
         try
         {
-            cmd.Execute(parts[1..]);
+            cmd.Execute(args);
         }
         catch (System.Exception ex)
         {
-            ModLog.Error($"[CONSOLE] Command '{parts[0]}' failed to execute - {ex}");
+            ModLog.Error($"[CONSOLE] Command '{name}' failed to execute - {ex}");
         }
     }
 

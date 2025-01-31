@@ -19,6 +19,8 @@ public class CheatConsole : BlasIIMod
 {
     internal CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
+    private readonly CommandHistory _history = new();
+
     private RectTransform consoleObject;
     private TextMeshProUGUI consoleText;
 
@@ -32,7 +34,9 @@ public class CheatConsole : BlasIIMod
     {
         InputHandler.RegisterDefaultKeybindings(new Dictionary<string, KeyCode>()
         {
-            { "ToggleConsole", KeyCode.Backslash }
+            { "ToggleConsole", KeyCode.Backslash },
+            { "PreviousCommand", KeyCode.UpArrow },
+            { "NextCommand", KeyCode.DownArrow },
         });
     }
 
@@ -55,6 +59,12 @@ public class CheatConsole : BlasIIMod
     {
         if (_enabled)
         {
+            if (InputHandler.GetKeyDown("PreviousCommand"))
+                _currentText = _history.GetPreviousCommand();
+
+            if (InputHandler.GetKeyDown("NextCommand"))
+                _currentText = _history.GetNextCommand();
+
             ProcessKeyInput();
         }
 
@@ -130,8 +140,9 @@ public class CheatConsole : BlasIIMod
     private void ProcessCommand(string command)
     {
         ModLog.Custom("[CONSOLE] " + command, System.Drawing.Color.White);
-        command = command.Trim();
+        _history.OnEnterCommand(command);
 
+        command = command.Trim();
         if (string.IsNullOrEmpty(command))
         {
             ModLog.Error($"[CONSOLE] No command was entered!");

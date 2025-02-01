@@ -3,13 +3,17 @@
 namespace BlasII.CheatConsole.Conditionals;
 
 /// <summary>
-/// Executes a method upon the condition
+/// A method that is executed if the condition is met
 /// </summary>
-public class ConditionalMethod(Func<string[], bool> condition, Action<string[]> execution) : IConditional
+public class ConditionalMethod(Func<string[], bool> condition, Action<string[]> execution)
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// The condition that is checked before execution
+    /// </summary>
     public Func<string[], bool> Condition { get; } = condition;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// The method executed if the condition is met
+    /// </summary>
     public Action<string[]> Execution { get; } = execution;
 }

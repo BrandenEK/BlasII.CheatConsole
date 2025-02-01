@@ -9,7 +9,7 @@ internal class LoadCommand : ConditionalCommand
 {
     public LoadCommand() : base("load") { }
 
-    protected override IEnumerable<IConditional> InitializeTargets()
+    protected override IEnumerable<ConditionalMethod> InitializeTargets()
     {
         return
         [

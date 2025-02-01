@@ -38,4 +38,14 @@ public abstract class ConditionalCommand : ModCommand
     /// Stores all conditional targets in the constructor
     /// </summary>
     protected abstract IEnumerable<ConditionalTarget> InitializeTargets();
+
+    /// <summary>
+    /// Converts the parameter to an integer, or throws an error
+    /// </summary>
+    protected int ToInteger(string arg)
+    {
+        return int.TryParse(arg, out int result)
+            ? result
+            : throw new System.Exception($"Parameter '{arg}' is not a valid integer!");
+    }
 }

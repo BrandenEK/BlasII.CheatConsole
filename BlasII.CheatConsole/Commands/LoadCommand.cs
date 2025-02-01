@@ -1,45 +1,31 @@
-﻿using Il2CppTGK.Game;
+﻿using BlasII.CheatConsole.Conditionals;
+using Il2CppTGK.Game;
 using Il2CppTGK.Game.PlayerSpawn;
+using System.Collections.Generic;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class LoadCommand : ModCommand
+internal class LoadCommand : ConditionalCommand
 {
     public LoadCommand() : base("load") { }
 
-    public override void Execute(string[] args)
+    protected override IEnumerable<ConditionalTarget> InitializeTargets()
     {
-        string scene;
-        int entry;
-
-        if (args.Length == 1)
-        {
-            scene = args[0].ToUpper();
-            entry = 0;
-        }
-        else if (args.Length == 2)
-        {
-            scene = args[0].ToUpper();
-            if (!ValidateIntParamater(args[1], out entry))
-                return;
-        }
-        else
-        {
-            ValidateParameterCount(args, 2);
-            return;
-        }
-
-        if (!CoreCache.Room.ExistsRoom(scene))
-        {
-            WriteFailure($"Room {scene} does not exist");
-            return;
-        }
-
-        LoadRoom(scene, entry);
+        return
+        [
+            new ConditionalTarget(args => args.Length == 1, args => LoadRoom(args[0].ToUpper(), 0)),
+            new ConditionalTarget(args => args.Length == 2, args => LoadRoom(args[0].ToUpper(), ToInteger(args[1]))),
+        ];
     }
 
     private void LoadRoom(string room, int entry)
     {
+        if (!CoreCache.Room.ExistsRoom(room))
+        {
+            WriteFailure($"Room {room} does not exist");
+            return;
+        }
+
         var location = new SceneEntryID()
         {
             scene = room.ToUpper(),

@@ -9,12 +9,13 @@ internal class LoadCommand : ConditionalCommand
 {
     public LoadCommand() : base("load") { }
 
-    protected override IEnumerable<ConditionalTarget> InitializeTargets()
+    protected override IEnumerable<IConditional> InitializeTargets()
     {
         return
         [
-            new ConditionalTarget(args => args.Length == 1, args => LoadRoom(args[0].ToUpper(), 0)),
-            new ConditionalTarget(args => args.Length == 2, args => LoadRoom(args[0].ToUpper(), ToInteger(args[1]))),
+            new ConditionalMethod(args => args.Length == 1, args => LoadRoom(args[0].ToUpper(), 0)),
+            new ConditionalMethod(args => args.Length == 2, args => LoadRoom(args[0].ToUpper(), ToInteger(args[1]))),
+            new ConditionalMethod(args => true, args => WriteFailure($"This command requires 1 or 2 parameters!")),
         ];
     }
 

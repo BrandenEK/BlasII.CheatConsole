@@ -1,5 +1,6 @@
 ﻿using BlasII.ModdingAPI;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BlasII.CheatConsole.Conditionals;
 
@@ -8,12 +9,12 @@ namespace BlasII.CheatConsole.Conditionals;
 /// </summary>
 public abstract class ConditionalCommand : ModCommand
 {
-    private readonly IEnumerable<ConditionalTarget> _targets;
+    private readonly IConditional[] _targets;
 
     /// <inheritdoc/>
     protected ConditionalCommand(string name) : base(name)
     {
-        _targets = InitializeTargets();
+        _targets = InitializeTargets().ToArray();
     }
 
     /// <summary>
@@ -37,7 +38,7 @@ public abstract class ConditionalCommand : ModCommand
     /// <summary>
     /// Stores all conditional targets in the constructor
     /// </summary>
-    protected abstract IEnumerable<ConditionalTarget> InitializeTargets();
+    protected abstract IEnumerable<IConditional> InitializeTargets();
 
     /// <summary>
     /// Converts the parameter to an integer, or throws an error

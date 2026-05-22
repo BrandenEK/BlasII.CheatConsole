@@ -30,7 +30,7 @@ public abstract class ConditionalCommand : ModCommand
             return;
         }
 
-        throw new System.Exception("Failed to resolve any conditon");
+        throw new System.Exception("Failed to resolve any condition");
     }
 
     /// <summary>
@@ -43,6 +43,8 @@ public abstract class ConditionalCommand : ModCommand
     /// </summary>
     protected int ToInteger(string arg)
     {
+        // Change this, I dont want it to throw an error, just log the mistake
+
         return int.TryParse(arg, out int result)
             ? result
             : throw new System.Exception($"Parameter '{arg}' is not a valid integer!");

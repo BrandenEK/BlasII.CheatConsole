@@ -133,6 +133,7 @@
 ### Map
 ```map reveal``` - Reveals the entire map
 
+---
 
 ### Prie Dieus
 ```priedieu upgrade``` - Upgrades all prie dieus to the maximum

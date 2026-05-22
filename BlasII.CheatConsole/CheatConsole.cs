@@ -241,6 +241,7 @@ public class CheatConsole : BlasIIMod
         provider.RegisterCommand(new ModifyStatCommand("defense", "GlobalDefense"));
         provider.RegisterCommand(new GuiltCommand());
 
+        provider.RegisterCommand(new MapCommand());
         provider.RegisterCommand(new PrieDieuCommand());
         provider.RegisterCommand(new QuestCommand());
 

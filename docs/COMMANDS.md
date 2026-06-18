@@ -108,6 +108,13 @@
 
 ---
 
+### Marks of the Embrujo
+```emarks add {amount}``` - Adds the specified amount of marks
+
+```emarks current``` - Displays the current amount of marks
+
+---
+
 ### Marks of the Preceptor
 ```pmarks add {amount}``` - Adds the specified amount of marks
 

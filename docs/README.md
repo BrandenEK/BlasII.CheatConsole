@@ -4,6 +4,11 @@
 
 ---
 
+## Contributors
+
+***- Programming and design -*** <br>
+[@BrandenEK](https://github.com/BrandenEK), [@salamint](https://github.com/salamint)
+
 ## Features
 - Press backslash to open the debug console
 - Use the up/down arrow keys to navigate to previous commands

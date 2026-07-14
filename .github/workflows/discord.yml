@@ -12,6 +12,4 @@ jobs:
         uses: SethCohen/github-releases-to-discord@v1
         with:
           webhook_url: ${{ secrets.WEBHOOK_URL }}
-          username: "Github"
-          avatar_url: "https://cdn.simpleicons.org/refinedgithub"
           footer_timestamp: true

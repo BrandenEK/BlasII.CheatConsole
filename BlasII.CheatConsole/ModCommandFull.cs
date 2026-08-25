@@ -1,4 +1,5 @@
 ﻿using BlasII.CheatConsole.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,12 +28,54 @@ internal class ModCommandFull : ModCommand
             return;
         }
 
-        Write("Executing command...");
-        // Parse the first arg to see what subcommand it is
-        // If no valid matches, display error
-        // If valid match but wrong params, display error
-        // If valid match and right params but fail to parse, display error
-        // Otherwise, execute subcommand
+        // Ensure there is a valid subcommand for the name
+        if (!_subcommands.TryGetValue(args[0], out MethodInfo subcommand))
+        {
+            WriteFailure($"'{args[0]}' is not a valid subcommand.  Enter '{Name} help' to see a list of valid subcommands.");
+            return;
+        }
+
+        ParameterInfo[] parameters = subcommand.GetParameters();
+
+        // Ensure the number of parameters matches the subcommand
+        if (args.Length - 1 != parameters.Length)
+        {
+            WriteFailure($"The subcommand '{Name} {args[0]}' expects {parameters.Length} parameters.  You passed {args.Length - 1}.");
+            return;
+        }
+
+        object[] arguments = new object[parameters.Length];
+
+        // Create and parse the list of parameters
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            string input = args[i + 1];
+            Type type = parameters[i].ParameterType;
+
+            try
+            {
+                arguments[i] = ParseParameter(input, type);
+            }
+            catch
+            {
+                WriteFailure($"Failed to parse '{input}' to a {type.Name}.");
+                return;
+            }
+        }
+
+        subcommand.Invoke(this, arguments);
+    }
+
+    private object ParseParameter(string input, Type type)
+    {
+        return Type.GetTypeCode(type) switch
+        {
+            TypeCode.Boolean => Convert.ToBoolean(input),
+            TypeCode.Int32 => Convert.ToInt32(input),
+            TypeCode.Single => Convert.ToSingle(input),
+            TypeCode.String => input,
+            _ => throw new NotSupportedException($"Parameter type '{type.Name}' is not supported"),
+        };
     }
 
     private void DisplayHelp()

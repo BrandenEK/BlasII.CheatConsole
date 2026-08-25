@@ -20,18 +20,21 @@ internal class NewWeaponCommand : ModCommandFull
     [SubCommand]
     private void Lock(string id)
     {
-        Write("lock wep id");
+        Write("lock wep " + id);
     }
 
     [SubCommand]
     private void Unlock(string id)
     {
-        Write("unlock wep id");
+        Write("unlock wep " + id);
     }
 
     [SubCommand]
-    private void Upgrade(string id)
+    private void Upgrade(string id, int numTimes)
     {
-        Write("upgrade wep id");
+        for (int i = 0; i < numTimes; i++)
+        {
+            Write("upgrade wep " + id);
+        }
     }
 }

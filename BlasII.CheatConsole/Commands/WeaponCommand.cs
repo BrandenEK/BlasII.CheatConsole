@@ -1,57 +1,24 @@
-﻿using BlasII.ModdingAPI.Assets;
+﻿using BlasII.CheatConsole.Attributes;
+using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class WeaponCommand : ModCommand
+internal class WeaponCommand : ModCommandFull
 {
     public WeaponCommand() : base("weapon") { }
 
-    public override void Execute(string[] args)
+    [SubCommand]
+    private void List()
     {
-        switch (args[0])
+        foreach (var weapon in AssetStorage.Weapons)
         {
-            case "unlock":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    UnlockWeapon(args[1]);
-                    break;
-                }
-            case "lock":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    LockWeapon(args[1]);
-                    break;
-                }
-            case "upgrade":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    UpgradeWeapon(args[1]);
-                    break;
-                }
-            case "list":
-                {
-                    if (!ValidateParameterCount(args, 1))
-                        return;
-
-                    ListWeapons();
-                    break;
-                }
-            default:
-                {
-                    WriteFailure("Unknown subcommand: " + args[0]);
-                    break;
-                }
+            Write($"{weapon.Id}: {weapon.StaticId}");
         }
     }
 
-    private void UnlockWeapon(string id)
+    [SubCommand]
+    private void Unlock(string id)
     {
         // Unlock all weapons
         if (id == "all")
@@ -74,7 +41,8 @@ internal class WeaponCommand : ModCommand
         CoreCache.EquipmentManager.Unlock(weapon);
     }
 
-    private void LockWeapon(string id)
+    [SubCommand]
+    private void Lock(string id)
     {
         // Lock all weapons
         if (id == "all")
@@ -97,7 +65,8 @@ internal class WeaponCommand : ModCommand
         CoreCache.EquipmentManager.Lock(weapon);
     }
 
-    private void UpgradeWeapon(string id)
+    [SubCommand]
+    private void Upgrade(string id)
     {
         // Check if the weapon exists
         if (!AssetStorage.Weapons.TryGetValue(id.ToUpper(), out var weapon))
@@ -109,13 +78,5 @@ internal class WeaponCommand : ModCommand
         // Upgrade the weapon
         Write("Upgrading weapon: " + id);
         CoreCache.WeaponMemoryManager.UpgradeWeaponTier(weapon);
-    }
-
-    private void ListWeapons()
-    {
-        foreach (var weapon in AssetStorage.Weapons)
-        {
-            Write($"{weapon.Id}: {weapon.StaticId}");
-        }
     }
 }

@@ -11,23 +11,25 @@ internal class NewWeaponCommand : ModCommandFull
 {
     public NewWeaponCommand() : base("wep") { }
 
-    [SubCommand("list", 0)]
+    [SubCommand]
     private void List()
     {
         Write("list all weapons");
     }
 
-    [SubCommand("lock", 1)]
+    [SubCommand]
     private void Lock(string id)
     {
         Write("lock wep id");
     }
 
+    [SubCommand]
     private void Unlock(string id)
     {
         Write("unlock wep id");
     }
 
+    [SubCommand]
     private void Upgrade(string id)
     {
         Write("upgrade wep id");

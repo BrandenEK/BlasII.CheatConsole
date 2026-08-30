@@ -1,50 +1,25 @@
-﻿using BlasII.CheatConsole.Extensions;
+﻿using BlasII.CheatConsole.Attributes;
+using BlasII.CheatConsole.Extensions;
 using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Inventory;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : ModCommand(name) where T : ItemID
+internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : ModCommandFull(name) where T : ItemID
 {
     private readonly GenericSingleStorage<T> _storage = storage;
 
-    public override sealed void Execute(string[] args)
+    [SubCommand]
+    private void List()
     {
-        switch (args[0])
+        foreach (var item in _storage)
         {
-            case "add":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    AddItem(args[1]);
-                    break;
-                }
-            case "remove":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    RemoveItem(args[1]);
-                    break;
-                }
-            case "list":
-                {
-                    if (!ValidateParameterCount(args, 1))
-                        return;
-
-                    ListItems();
-                    break;
-                }
-            default:
-                {
-                    WriteFailure("Unknown subcommand: " + args[0]);
-                    break;
-                }
+            Write($"{item.Id}: {item.Value.caption}");
         }
     }
 
-    private void AddItem(string id)
+    [SubCommand]
+    private void Add(string id)
     {
         // Add all items
         if (id == "all")
@@ -67,7 +42,8 @@ internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : Mo
         AssetStorage.PlayerInventory.AddItemAsync(item);
     }
 
-    private void RemoveItem(string id)
+    [SubCommand]
+    private void Remove(string id)
     {
         // Remove all items
         if (id == "all")
@@ -88,13 +64,5 @@ internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : Mo
         // Remove the single item
         Write($"Removing {Name}: " + id);
         AssetStorage.PlayerInventory.RemoveItem(item);
-    }
-
-    private void ListItems()
-    {
-        foreach (var item in _storage)
-        {
-            Write($"{item.Id}: {item.Value.caption}");
-        }
     }
 }

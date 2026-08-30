@@ -1,49 +1,24 @@
-﻿using BlasII.ModdingAPI.Assets;
+﻿using BlasII.CheatConsole.Attributes;
+using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class AbilityCommand : ModCommand
+internal class AbilityCommand : ModCommandFull
 {
     public AbilityCommand() : base("ability") { }
 
-    public override void Execute(string[] args)
+    [SubCommand]
+    private void List()
     {
-        switch (args[0])
+        foreach (var ability in AssetStorage.Abilities)
         {
-            case "unlock":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    UnlockAbility(args[1]);
-                    break;
-                }
-            case "lock":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    LockAbility(args[1]);
-                    break;
-                }
-            case "list":
-                {
-                    if (!ValidateParameterCount(args, 1))
-                        return;
-
-                    ListAbilities();
-                    break;
-                }
-            default:
-                {
-                    WriteFailure("Unknown subcommand: " + args[0]);
-                    break;
-                }
+            Write($"{ability.Id}: {ability.StaticId}");
         }
     }
 
-    private void UnlockAbility(string id)
+    [SubCommand]
+    private void Unlock(string id)
     {
         // Unlock all abilities
         if (id == "all")
@@ -66,7 +41,8 @@ internal class AbilityCommand : ModCommand
         CoreCache.AbilitiesUnlockManager.SetAbility(ability, true);
     }
 
-    private void LockAbility(string id)
+    [SubCommand]
+    private void Lock(string id)
     {
         // Lock all abilities
         if (id == "all")
@@ -87,13 +63,5 @@ internal class AbilityCommand : ModCommand
         // Lock the single ability
         Write("Locking ability: " + id);
         CoreCache.AbilitiesUnlockManager.SetAbility(ability, false);
-    }
-
-    private void ListAbilities()
-    {
-        foreach (var ability in AssetStorage.Abilities)
-        {
-            Write($"{ability.Id}: {ability.StaticId}");
-        }
     }
 }

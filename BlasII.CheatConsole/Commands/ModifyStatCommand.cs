@@ -1,34 +1,13 @@
-﻿using BlasII.ModdingAPI.Assets;
+﻿using BlasII.CheatConsole.Attributes;
+using BlasII.ModdingAPI.Assets;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class ModifyStatCommand(string name, string statName) : ModCommand(name)
+internal class ModifyStatCommand(string name, string statName) : ModCommandFull(name)
 {
     private readonly string _statName = statName;
 
-    public override sealed void Execute(string[] args)
-    {
-        switch (args[0])
-        {
-            case "add":
-                {
-                    if (!ValidateParameterCount(args, 2))
-                        return;
-
-                    if (!ValidateIntParamater(args[1], out int amount))
-                        return;
-
-                    Add(amount);
-                    break;
-                }
-            default:
-                {
-                    WriteFailure("Unknown subcommand: " + args[0]);
-                    break;
-                }
-        }
-    }
-
+    [SubCommand]
     private void Add(int amount)
     {
         Write($"Adding {amount} {Name}");

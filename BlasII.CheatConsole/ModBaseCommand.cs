@@ -24,32 +24,6 @@ public abstract class ModBaseCommand(string name)
     public virtual void Update() { }
 
     /// <summary>
-    /// Ensures there is a certain amount of parameters
-    /// </summary>
-    protected bool ValidateParameterCount(string[] paramaters, int num)
-    {
-        bool isValid = paramaters.Length == num;
-
-        if (!isValid)
-            WriteFailure($"This command requires {num} parameters!");
-
-        return isValid;
-    }
-
-    /// <summary>
-    /// Ensures the parameter is a valid integer
-    /// </summary>
-    protected bool ValidateIntParamater(string parameter, out int result)
-    {
-        bool isValid = int.TryParse(parameter, out result);
-
-        if (!isValid)
-            WriteFailure($"Parameter '{parameter}' is not a valid integer!");
-
-        return isValid;
-    }
-
-    /// <summary>
     /// Converts a string to a valid parameter type
     /// </summary>
     protected object ParseParameter(string input, Type type)

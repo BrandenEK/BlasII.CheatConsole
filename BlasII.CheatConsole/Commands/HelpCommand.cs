@@ -6,8 +6,6 @@ internal class HelpCommand : ModBaseCommand
 {
     public HelpCommand() : base("help") { }
 
-    public override bool NeedsParameters => false;
-
     public override void Execute(string[] args)
     {
         string commands = string.Join(", ", CommandRegister.Commands.Select(x => x.Name));

@@ -14,11 +14,6 @@ public abstract class ModBaseCommand(string name)
     public string Name { get; } = name;
 
     /// <summary>
-    /// Whether this command requires at least one parameter
-    /// </summary>
-    public virtual bool NeedsParameters { get; } = true;
-
-    /// <summary>
     /// Performs any functions when the command is executed
     /// </summary>
     public abstract void Execute(string[] args);

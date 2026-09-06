@@ -164,12 +164,6 @@ public class CheatConsole : BlasIIMod
             return;
         }
 
-        if (cmd.NeedsParameters && args.Length < 1)
-        {
-            ModLog.Error($"[CONSOLE] Command '{name}' needs at least one parameter!");
-            return;
-        }
-
         try
         {
             cmd.Execute(args);

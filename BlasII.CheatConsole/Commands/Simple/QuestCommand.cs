@@ -2,7 +2,7 @@
 using Il2CppTGK.Framework.Quest;
 using Il2CppTGK.Game;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Simple;
 
 internal class QuestCommand : ModSimpleCommand
 {

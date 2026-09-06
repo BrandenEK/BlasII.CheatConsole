@@ -2,7 +2,7 @@
 using BlasII.ModdingAPI.Assets;
 using BlasII.ModdingAPI.Helpers;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Simple;
 
 internal class GodmodeCommand : ModSimpleCommand
 {

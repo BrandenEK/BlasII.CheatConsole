@@ -4,21 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace BlasII.CheatConsole;
+namespace BlasII.CheatConsole.Commands;
 
-internal class ModCommandFull : ModCommand
+/// <summary>
+/// A command that can have multiple actions
+/// </summary>
+public class ModComplexCommand : ModCommand
 {
     private readonly Dictionary<string, MethodInfo> _subcommands;
 
     public override bool NeedsParameters => false;
 
-    public ModCommandFull(string name) : base(name)
+    /// <summary>
+    /// Creates a new complex command
+    /// </summary>
+    public ModComplexCommand(string name) : base(name)
     {
         _subcommands = GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(x => x.IsDefined(typeof(SubCommandAttribute), false))
             .ToDictionary(x => x.Name.ToLower(), x => x);
     }
 
+    /// <summary>
+    /// Executes the proper subcommand
+    /// </summary>
     public override void Execute(string[] args)
     {
         // Typing no parameters or typing help will list the possible subcommands
@@ -64,18 +73,6 @@ internal class ModCommandFull : ModCommand
         }
 
         subcommand.Invoke(this, arguments);
-    }
-
-    private object ParseParameter(string input, Type type)
-    {
-        return Type.GetTypeCode(type) switch
-        {
-            TypeCode.Boolean => Convert.ToBoolean(input),
-            TypeCode.Int32 => Convert.ToInt32(input),
-            TypeCode.Single => Convert.ToSingle(input),
-            TypeCode.String => input,
-            _ => throw new NotSupportedException($"Parameter type '{type.Name}' is not supported"),
-        };
     }
 
     private void DisplayHelp()

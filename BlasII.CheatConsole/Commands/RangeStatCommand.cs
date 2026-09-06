@@ -3,7 +3,7 @@ using BlasII.ModdingAPI.Assets;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class RangeStatCommand(string name, string statName) : ModCommandFull(name)
+internal class RangeStatCommand(string name, string statName) : ModComplexCommand(name)
 {
     private readonly string _statName = statName;
 

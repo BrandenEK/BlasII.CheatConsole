@@ -4,7 +4,7 @@ using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class WeaponCommand : ModCommandFull
+internal class WeaponCommand : ModComplexCommand
 {
     public WeaponCommand() : base("weapon") { }
 

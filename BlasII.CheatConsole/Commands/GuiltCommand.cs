@@ -3,7 +3,7 @@ using BlasII.ModdingAPI.Assets;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class GuiltCommand : ModCommandFull
+internal class GuiltCommand : ModComplexCommand
 {
     public GuiltCommand() : base("guilt") { }
 

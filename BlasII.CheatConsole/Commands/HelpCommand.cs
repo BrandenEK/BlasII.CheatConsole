@@ -6,14 +6,12 @@ internal class HelpCommand : ModCommand
 {
     public HelpCommand() : base("help") { }
 
-    public override bool NeedsParameters { get; } = false;
+    public override bool NeedsParameters => false;
 
     public override void Execute(string[] args)
     {
-        if (!ValidateParameterCount(args, 0))
-            return;
-
         string commands = string.Join(", ", CommandRegister.Commands.Select(x => x.Name));
+        Write("Type 'help' after a command to see more detailed help for that specific command");
         Write($"Available commands: {commands}");
     }
 }

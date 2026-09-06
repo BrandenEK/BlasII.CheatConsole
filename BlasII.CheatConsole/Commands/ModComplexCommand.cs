@@ -28,7 +28,7 @@ public class ModComplexCommand : ModCommand
     /// <summary>
     /// Executes the proper subcommand
     /// </summary>
-    public override void Execute(string[] args)
+    public sealed override void Execute(string[] args)
     {
         // Typing no parameters or typing help will list the possible subcommands
         if (args.Length < 1 || args[0].ToLower() == "help")

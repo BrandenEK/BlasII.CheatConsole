@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace BlasII.CheatConsole;
+namespace BlasII.CheatConsole.Commands;
 
-internal class ModCommandFull : ModCommand
+internal class ModComplexCommand : ModCommand
 {
     private readonly Dictionary<string, MethodInfo> _subcommands;
 
     public override bool NeedsParameters => false;
 
-    public ModCommandFull(string name) : base(name)
+    public ModComplexCommand(string name) : base(name)
     {
         _subcommands = GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(x => x.IsDefined(typeof(SubCommandAttribute), false))

@@ -4,7 +4,7 @@ using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class AbilityCommand : ModCommandFull
+internal class AbilityCommand : ModComplexCommand
 {
     public AbilityCommand() : base("ability") { }
 

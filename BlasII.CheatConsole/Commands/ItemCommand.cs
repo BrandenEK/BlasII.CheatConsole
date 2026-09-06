@@ -5,7 +5,7 @@ using Il2CppTGK.Inventory;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : ModCommandFull(name) where T : ItemID
+internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : ModComplexCommand(name) where T : ItemID
 {
     private readonly GenericSingleStorage<T> _storage = storage;
 

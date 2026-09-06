@@ -1,5 +1,4 @@
 ﻿using BlasII.CheatConsole.Commands;
-using BlasII.CheatConsole.Commands.Simple;
 using BlasII.Framework.UI;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Assets;
@@ -249,6 +248,5 @@ public class CheatConsole : BlasIIMod
 
         provider.RegisterCommand(new GodmodeCommand());
         provider.RegisterCommand(new LoadCommand());
-        provider.RegisterCommand(new TestCommand());
     }
 }

@@ -3,7 +3,7 @@ using Il2CppTGK.Game;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class PrieDieuCommand : ModCommandFull
+internal class PrieDieuCommand : ModComplexCommand
 {
     public PrieDieuCommand() : base("priedieu") { }
 

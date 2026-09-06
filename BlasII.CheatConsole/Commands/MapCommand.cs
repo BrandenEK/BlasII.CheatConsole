@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class MapCommand : ModCommandFull
+internal class MapCommand : ModComplexCommand
 {
     public MapCommand() : base("map") { }
 

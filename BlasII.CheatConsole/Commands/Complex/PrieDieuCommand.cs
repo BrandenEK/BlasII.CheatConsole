@@ -1,7 +1,7 @@
 ﻿using BlasII.CheatConsole.Attributes;
 using Il2CppTGK.Game;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Complex;
 
 internal class PrieDieuCommand : ModComplexCommand
 {

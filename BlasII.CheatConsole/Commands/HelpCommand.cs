@@ -1,14 +1,14 @@
-﻿using BlasII.CheatConsole.Attributes;
-using System.Linq;
+﻿using System.Linq;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class HelpCommand : ModSimpleCommand
+internal class HelpCommand : ModCommand
 {
     public HelpCommand() : base("help") { }
 
-    [MainCommand]
-    private void Execute()
+    public override bool NeedsParameters => false;
+
+    public override void Execute(string[] args)
     {
         string commands = string.Join(", ", CommandRegister.Commands.Select(x => x.Name));
         Write("Type 'help' after a command to see more detailed help for that specific command");

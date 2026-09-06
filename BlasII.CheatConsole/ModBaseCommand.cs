@@ -6,7 +6,7 @@ namespace BlasII.CheatConsole;
 /// <summary>
 /// A command that can be executed in the cheat console
 /// </summary>
-public abstract class ModCommand(string name)
+public abstract class ModBaseCommand(string name)
 {
     /// <summary>
     /// The name used to execute the command

@@ -8,7 +8,7 @@ namespace BlasII.CheatConsole.Commands;
 /// <summary>
 /// A command that only has one action
 /// </summary>
-public class ModSimpleCommand : ModCommand
+public class ModSimpleCommand : ModBaseCommand
 {
     private readonly MethodInfo _command;
 

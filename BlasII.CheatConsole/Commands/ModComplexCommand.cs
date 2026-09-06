@@ -9,7 +9,7 @@ namespace BlasII.CheatConsole.Commands;
 /// <summary>
 /// A command that can have multiple actions
 /// </summary>
-public class ModComplexCommand : ModCommand
+public class ModComplexCommand : ModBaseCommand
 {
     private readonly Dictionary<string, MethodInfo> _subcommands;
 

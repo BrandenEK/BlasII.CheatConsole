@@ -155,7 +155,7 @@ public class CheatConsole : BlasIIMod
         string name = parts.First().ToLower();
         string[] args = parts.Skip(1).ToArray();
 
-        ModCommand cmd = CommandRegister.Commands.FirstOrDefault(x => x.Name == name);
+        ModBaseCommand cmd = CommandRegister.Commands.FirstOrDefault(x => x.Name == name);
         if (cmd == null)
         {
             ModLog.Error($"[CONSOLE] Command '{name}' is not a valid command!");

@@ -22,6 +22,7 @@ public class CheatConsole : BlasIIMod
     internal CheatConsole() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
     private readonly CommandHistory _history = new();
+    private readonly HelpCommand _helpCommand = new();
 
     private RectTransform consoleObject;
     private TextMeshProUGUI consoleText;
@@ -161,12 +162,7 @@ public class CheatConsole : BlasIIMod
         if (cmd == null)
         {
             ModLog.Error($"[CONSOLE] Command '{name}' is not a valid command!");
-            return;
-        }
-
-        if (cmd.NeedsParameters && args.Length < 1)
-        {
-            ModLog.Error($"[CONSOLE] Command '{name}' needs at least one parameter!");
+            _helpCommand.Execute([]);
             return;
         }
 
@@ -223,7 +219,7 @@ public class CheatConsole : BlasIIMod
     /// </summary>
     protected override void OnRegisterServices(ModServiceProvider provider)
     {
-        provider.RegisterCommand(new HelpCommand());
+        provider.RegisterCommand(_helpCommand);
 
         provider.RegisterCommand(new ItemCommand<RosaryBeadItemID>("bead", AssetStorage.Beads));
         provider.RegisterCommand(new ItemCommand<FigureItemID>("figure", AssetStorage.Figures));

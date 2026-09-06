@@ -13,8 +13,6 @@ public class ModComplexCommand : ModBaseCommand
 {
     private readonly Dictionary<string, MethodInfo> _subcommands;
 
-    public override bool NeedsParameters => false;
-
     /// <summary>
     /// Creates a new complex command
     /// </summary>

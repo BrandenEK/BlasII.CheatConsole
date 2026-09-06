@@ -12,8 +12,6 @@ public class ModSimpleCommand : ModBaseCommand
 {
     private readonly MethodInfo _command;
 
-    public override bool NeedsParameters => false;
-
     /// <summary>
     /// Creates a new simple command
     /// </summary>

@@ -3,7 +3,7 @@ using BlasII.CheatConsole.Extensions;
 using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Inventory;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Complex;
 
 internal class ItemCommand<T>(string name, GenericSingleStorage<T> storage) : ModComplexCommand(name) where T : ItemID
 {

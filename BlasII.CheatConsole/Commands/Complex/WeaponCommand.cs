@@ -2,7 +2,7 @@
 using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Game;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Complex;
 
 internal class WeaponCommand : ModComplexCommand
 {

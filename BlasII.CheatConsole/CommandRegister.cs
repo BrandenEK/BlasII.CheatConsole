@@ -9,11 +9,11 @@ namespace BlasII.CheatConsole;
 /// </summary>
 public static class CommandRegister
 {
-    private static readonly List<ModCommand> _commands = [];
-    internal static IEnumerable<ModCommand> Commands => _commands;
+    private static readonly List<ModBaseCommand> _commands = [];
+    internal static IEnumerable<ModBaseCommand> Commands => _commands;
 
     /// <summary> Registers a new console command </summary>
-    public static void RegisterCommand(this ModServiceProvider provider, ModCommand command)
+    public static void RegisterCommand(this ModServiceProvider provider, ModBaseCommand command)
     {
         if (provider == null)
             return;

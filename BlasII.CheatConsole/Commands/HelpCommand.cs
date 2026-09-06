@@ -2,7 +2,7 @@
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class HelpCommand : ModCommand
+internal class HelpCommand : ModBaseCommand
 {
     public HelpCommand() : base("help") { }
 

@@ -1,7 +1,7 @@
 ﻿using BlasII.CheatConsole.Attributes;
 using BlasII.ModdingAPI.Assets;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Complex;
 
 internal class ValueStatCommand(string name, string statName) : ModComplexCommand(name)
 {

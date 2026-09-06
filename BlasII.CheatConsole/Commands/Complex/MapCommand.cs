@@ -3,7 +3,7 @@ using Il2CppSystem.Linq;
 using Il2CppTGK.Game;
 using System.Linq;
 
-namespace BlasII.CheatConsole.Commands;
+namespace BlasII.CheatConsole.Commands.Complex;
 
 internal class MapCommand : ModComplexCommand
 {

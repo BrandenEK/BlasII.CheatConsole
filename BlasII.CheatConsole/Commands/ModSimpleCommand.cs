@@ -5,18 +5,27 @@ using System.Reflection;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class ModSimpleCommand : ModCommand
+/// <summary>
+/// A command that only has one action
+/// </summary>
+public class ModSimpleCommand : ModCommand
 {
     private readonly MethodInfo _command;
 
     public override bool NeedsParameters => false;
 
+    /// <summary>
+    /// Creates a new simple command
+    /// </summary>
     public ModSimpleCommand(string name) : base(name)
     {
         _command = GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
             .FirstOrDefault(x => x.IsDefined(typeof(MainCommandAttribute), false)) ?? throw new InvalidOperationException($"The command {Name} is missing a {nameof(MainCommandAttribute)} method");
     }
 
+    /// <summary>
+    /// Executes the main command
+    /// </summary>
     public override void Execute(string[] args)
     {
         // Typing no parameters or typing help will list the possible subcommands

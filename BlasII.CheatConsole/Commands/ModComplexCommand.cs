@@ -6,12 +6,18 @@ using System.Reflection;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class ModComplexCommand : ModCommand
+/// <summary>
+/// A command that can have multiple actions
+/// </summary>
+public class ModComplexCommand : ModCommand
 {
     private readonly Dictionary<string, MethodInfo> _subcommands;
 
     public override bool NeedsParameters => false;
 
+    /// <summary>
+    /// Creates a new complex command
+    /// </summary>
     public ModComplexCommand(string name) : base(name)
     {
         _subcommands = GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -19,6 +25,9 @@ internal class ModComplexCommand : ModCommand
             .ToDictionary(x => x.Name.ToLower(), x => x);
     }
 
+    /// <summary>
+    /// Executes the proper subcommand
+    /// </summary>
     public override void Execute(string[] args)
     {
         // Typing no parameters or typing help will list the possible subcommands

@@ -1,15 +1,17 @@
-﻿using BlasII.ModdingAPI.Assets;
+﻿using BlasII.CheatConsole.Attributes;
+using BlasII.ModdingAPI.Assets;
 using BlasII.ModdingAPI.Helpers;
 
 namespace BlasII.CheatConsole.Commands;
 
-internal class GodmodeCommand : ModCommand
+internal class GodmodeCommand : ModSimpleCommand
 {
     public GodmodeCommand() : base("godmode") { }
 
-    public override void Execute(string[] args)
+    [MainCommand]
+    private void Execute(string status)
     {
-        switch (args[0])
+        switch (status)
         {
             case "on":
                 Write("Activating godmode");
@@ -20,7 +22,7 @@ internal class GodmodeCommand : ModCommand
                 _active = false;
                 break;
             default:
-                WriteFailure("Acceptable input is 'on' or 'off'");
+                WriteFailure("Acceptable status is 'on' or 'off'");
                 break;
         }
     }

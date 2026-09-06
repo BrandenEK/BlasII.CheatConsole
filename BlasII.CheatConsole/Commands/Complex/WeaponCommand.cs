@@ -1,6 +1,7 @@
 ﻿using BlasII.CheatConsole.Attributes;
 using BlasII.ModdingAPI.Assets;
 using Il2CppTGK.Game;
+using System.Linq;
 
 namespace BlasII.CheatConsole.Commands.Complex;
 
@@ -24,7 +25,7 @@ internal class WeaponCommand : ModComplexCommand
         if (id == "all")
         {
             Write("Unlocking all weapons!");
-            foreach (var w in AssetStorage.Weapons)
+            foreach (var w in AssetStorage.Weapons.Where(x => !BANNED_WEAPONS.Any(y => y == x.StaticId)))
                 CoreCache.EquipmentManager.Unlock(w.Value);
             return;
         }
@@ -48,7 +49,7 @@ internal class WeaponCommand : ModComplexCommand
         if (id == "all")
         {
             Write("Locking all weapons!");
-            foreach (var w in AssetStorage.Weapons)
+            foreach (var w in AssetStorage.Weapons.Where(x => !BANNED_WEAPONS.Any(y => y == x.StaticId)))
                 CoreCache.EquipmentManager.Lock(w.Value);
             return;
         }
@@ -79,4 +80,6 @@ internal class WeaponCommand : ModComplexCommand
         Write("Upgrading weapon: " + id);
         CoreCache.WeaponMemoryManager.UpgradeWeaponTier(weapon);
     }
+
+    private static readonly WEAPON_IDS[] BANNED_WEAPONS = { WEAPON_IDS.NoWeapon, WEAPON_IDS.BrokenSword };
 }

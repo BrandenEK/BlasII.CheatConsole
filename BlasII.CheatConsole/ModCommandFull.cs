@@ -66,18 +66,6 @@ internal class ModCommandFull : ModCommand
         subcommand.Invoke(this, arguments);
     }
 
-    private object ParseParameter(string input, Type type)
-    {
-        return Type.GetTypeCode(type) switch
-        {
-            TypeCode.Boolean => Convert.ToBoolean(input),
-            TypeCode.Int32 => Convert.ToInt32(input),
-            TypeCode.Single => Convert.ToSingle(input),
-            TypeCode.String => input,
-            _ => throw new NotSupportedException($"Parameter type '{type.Name}' is not supported"),
-        };
-    }
-
     private void DisplayHelp()
     {
         Write($"Possible subcommands for {Name}:");

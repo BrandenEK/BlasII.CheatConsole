@@ -26,7 +26,35 @@ internal class ModSimpleCommand : ModCommand
             return;
         }
 
-        Write("Running command");
+        ParameterInfo[] parameters = _command.GetParameters();
+
+        // Ensure the number of parameters matches the command
+        if (args.Length != parameters.Length)
+        {
+            WriteFailure($"The command '{Name}' expects {parameters.Length} parameters.  You passed {args.Length}.");
+            return;
+        }
+
+        object[] arguments = new object[parameters.Length];
+
+        // Create and parse the list of parameters
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            string input = args[i];
+            Type type = parameters[i].ParameterType;
+
+            try
+            {
+                arguments[i] = ParseParameter(input, type);
+            }
+            catch
+            {
+                WriteFailure($"Failed to parse '{input}' to a {type.Name}.");
+                return;
+            }
+        }
+
+        _command.Invoke(this, arguments);
     }
 
     private void DisplayHelp()

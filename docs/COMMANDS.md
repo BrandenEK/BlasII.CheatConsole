@@ -152,10 +152,36 @@
 
 ---
 
+### Servants
+```list``` - Lists all available servants
+
+```unlock {id}``` - Unlocks the servant with the specified ID
+
+```lock {id}``` - Locks the servant with the specified ID
+
+```activate {id}``` - Activates the servant with the specified ID
+
+```deactivate``` - Deactivates the current servant
+
+```getxp``` - Displays the XP for the current servant
+
+```addxp {amount}``` - Adds the specified amount of XP to the current servant
+
+---
+
+### Skins
+```list``` - Lists all available skins
+
+```unlock {id}``` - Unlocks the skin with the specified ID
+
+```set {id}``` - Equips the skin with the specified ID
+
+---
+
 ### God Mode
 ```godmode {on/off}``` - Enables unlimited health and fervour
 
 ---
 
 ### Loading
-```load {scene} [entryId]``` - Loads the specified room at the optional entry id
+```load {room}``` - Loads the specified room

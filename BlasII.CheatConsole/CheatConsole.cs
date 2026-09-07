@@ -243,6 +243,7 @@ public class CheatConsole : BlasIIMod
         provider.RegisterCommand(new MapCommand());
         provider.RegisterCommand(new PrieDieuCommand());
         provider.RegisterCommand(new QuestCommand());
+        provider.RegisterCommand(new ServantCommand());
         provider.RegisterCommand(new SkinCommand());
 
         provider.RegisterCommand(new GodmodeCommand());

@@ -2,7 +2,10 @@
 
 namespace BlasII.CheatConsole.Attributes;
 
+/// <summary>
+/// Marks this method as a subcommand
+/// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-internal class SubCommandAttribute : Attribute
+public class SubCommandAttribute : Attribute
 {
 }

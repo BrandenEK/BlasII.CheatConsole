@@ -6,58 +6,58 @@
 ---
 
 ### Beads
+```bead list``` - Lists all of the existing beads
+
 ```bead add {id}``` - Adds the specified bead to the inventory
 
 ```bead remove {id}``` - Removes the specified bead from the inventory
 
-```bead list``` - Lists all of the existing beads
-
 ---
 
 ### Prayers
+```prayer list``` - Lists all of the existing prayers
+
 ```prayer add {id}``` - Adds the specified prayer to the inventory
 
 ```prayer remove {id}``` - Removes the specified prayer from the inventory
 
-```prayer list``` - Lists all of the existing prayers
-
 ---
 
 ### Figures
+```figure list``` - Lists all of the existing figures
+
 ```figure add {id}``` - Adds the specified figure to the inventory
 
 ```figure remove {id}``` - Removes the specified figure from the inventory
 
-```figure list``` - Lists all of the existing figures
-
 ---
 
 ### Quest Items
+```questitem list``` - Lists all of the existing quest items
+
 ```questitem add {id}``` - Adds the specified quest item to the inventory
 
 ```questitem remove {id}``` - Removes the specified quest item from the inventory
 
-```questitem list``` - Lists all of the existing quest items
-
 ---
 
 ### Abilities
+```ability list``` - Lists all of the existing abilities
+
 ```ability unlock {id}``` - Unlocks the specified ability
 
 ```ability lock {id}``` - Locks the specified ability
 
-```ability list``` - Lists all of the existing abilities
-
 ---
 
 ### Weapons
+```weapon list``` - Lists all of the existing weapons
+
 ```weapon unlock {id}``` - Unlocks the specified weapon
 
 ```weapon lock {id}``` - Locks the specified weapon
 
 ```weapon upgrade {id}``` - Upgrades the specified weapon
-
-```weapon list``` - Lists all of the existing weapons
 
 ---
 
@@ -95,30 +95,30 @@
 ---
 
 ### Tears
-```tears add {amount}``` - Adds the specified amount of tears
-
 ```tears current``` - Displays the current amount of tears
+
+```tears add {amount}``` - Adds the specified amount of tears
 
 ---
 
 ### Marks of Martyrdom
-```marks add {amount}``` - Adds the specified amount of marks
-
 ```marks current``` - Displays the current amount of marks
+
+```marks add {amount}``` - Adds the specified amount of marks
 
 ---
 
 ### Marks of the Embrujo
-```emarks add {amount}``` - Adds the specified amount of marks
-
 ```emarks current``` - Displays the current amount of marks
+
+```emarks add {amount}``` - Adds the specified amount of marks
 
 ---
 
 ### Marks of the Preceptor
-```pmarks add {amount}``` - Adds the specified amount of marks
-
 ```pmarks current``` - Displays the current amount of marks
+
+```pmarks add {amount}``` - Adds the specified amount of marks
 
 ---
 
@@ -148,7 +148,7 @@
 ---
 
 ### Quests
-```quest {questId} {varId} {value}``` - Sets the quest variable to the specified value
+```quest {quest} {variable} {value}``` - Sets the quest variable to the specified value
 
 ---
 
@@ -179,7 +179,7 @@
 ---
 
 ### God Mode
-```godmode {on/off}``` - Enables unlimited health and fervour
+```godmode {status}``` - Enables unlimited health and fervour
 
 ---
 

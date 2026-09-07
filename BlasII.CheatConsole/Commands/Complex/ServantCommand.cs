@@ -2,6 +2,7 @@
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Managers.Data;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BlasII.CheatConsole.Commands.Complex;
@@ -12,7 +13,7 @@ internal class ServantCommand : ModComplexCommand
 
     public ServantCommand() : base("servant")
     {
-        _servants = Resources.FindObjectsOfTypeAll<PlayerFamiliarID>();
+        _servants = Resources.FindObjectsOfTypeAll<PlayerFamiliarID>().OrderBy(x => x.name);
     }
 
     [SubCommand]
@@ -30,30 +31,66 @@ internal class ServantCommand : ModComplexCommand
     [SubCommand]
     private void Unlock(string id)
     {
-        // Unlocks the servant id
+        var servant = _servants.First(x => x.name == id.ToUpper());
+
+        if (servant == null)
+        {
+            WriteFailure($"The servant {id} does not exist.");
+            return;
+        }
+
+        Write($"Unlocking servant {servant.name}");
+        CoreCache.PlayerFamiliarsManager.UnlockFamiliar(servant.id);
     }
 
     [SubCommand]
     private void Lock(string id)
     {
-        // Locks the servant id
+        var servant = _servants.First(x => x.name == id.ToUpper());
+
+        if (servant == null)
+        {
+            WriteFailure($"The servant {id} does not exist.");
+            return;
+        }
+
+        Write($"Locking servant {servant.name}");
+        CoreCache.PlayerFamiliarsManager.LockFamiliar(servant.id);
     }
 
     [SubCommand]
     private void Activate(string id)
     {
-        // Activates the servant id
+        var servant = _servants.First(x => x.name == id.ToUpper());
+
+        if (servant == null)
+        {
+            WriteFailure($"The servant {id} does not exist.");
+            return;
+        }
+
+        Write($"Activating servant {servant.name}");
+        CoreCache.PlayerFamiliarsManager.ActivateFamiliar(servant);
+    }
+
+    [SubCommand]
+    private void Deactivate()
+    {
+        Write("Deactivating current servant");
+        CoreCache.PlayerFamiliarsManager.DeactivateCurrentFamiliar();
     }
 
     [SubCommand]
     private void GetXP()
     {
-        // Prints the current xp
+        int xp = CoreCache.PlayerFamiliarsManager.GetFamiliarExp(CoreCache.PlayerFamiliarsManager.GetCurrentFamiliarID());
+        Write($"Current servant xp: {xp}");
     }
 
     [SubCommand]
     private void AddXP(int xp)
     {
-        // Adds to xp of current servant
+        Write($"Adding {xp} to current servant");
+        CoreCache.PlayerFamiliarsManager.AddExpToCurrentFamiliar(xp);
     }
 }

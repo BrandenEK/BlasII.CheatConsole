@@ -88,9 +88,9 @@ internal class ServantCommand : ModComplexCommand
     }
 
     [SubCommand]
-    private void AddXP(int xp)
+    private void AddXP(int amount)
     {
-        Write($"Adding {xp} to current servant");
-        CoreCache.PlayerFamiliarsManager.AddExpToCurrentFamiliar(xp);
+        Write($"Adding {amount} to current servant");
+        CoreCache.PlayerFamiliarsManager.AddExpToCurrentFamiliar(amount);
     }
 }
